@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.ir.maven;
+package deti.ir.ranking;
 
 /**
  *
  * @author RuiOliveira
  */
-public class Test {
-    public static void main(String[]args){
-        System.out.println("Test main"); 
-    }
+public class Ranking {
     
 }
