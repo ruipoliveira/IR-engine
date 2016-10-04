@@ -3,18 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package deti.ir;
+package deti.ir.indexer;
 
 /**
  *
  * @author RuiOliveira
  */
-public class RIproject {
-    private DocumentProcessor dp; 
-    private SearcherProcessor sp; 
-    
-    public static void main(String[]args){
-        System.out.println("Test main"); 
-    }
+public class TokenIDDocFreqMap {
     
 }
