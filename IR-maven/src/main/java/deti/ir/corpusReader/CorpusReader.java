@@ -5,6 +5,8 @@
  */
 package deti.ir.corpusReader;
 
+import javax.swing.text.Document;
+
 /**
  *
  * @author RuiOliveira
@@ -12,6 +14,10 @@ package deti.ir.corpusReader;
 public class CorpusReader {
     
     public CorpusReader(){
+        
+    }
+    
+    public void getText(){
         
     }
 }

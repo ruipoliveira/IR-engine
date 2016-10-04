@@ -5,6 +5,8 @@
  */
 package deti.ir.searcher;
 
+import java.util.List;
+
 /**
  *
  * @author RuiOliveira
@@ -14,7 +16,7 @@ public class Searcher {
         
     }
     
-    public void search(){
-        
+    public List<String> getTerms(){
+        return null;
     }
 }
