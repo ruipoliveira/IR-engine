@@ -9,6 +9,14 @@ package deti.ir.ranking;
  *
  * @author RuiOliveira
  */
-public class Ranking {
+public class Ranker {
+    
+    public Ranker(){
+        
+    }
+    
+    public void search(){
+        
+    }
     
 }

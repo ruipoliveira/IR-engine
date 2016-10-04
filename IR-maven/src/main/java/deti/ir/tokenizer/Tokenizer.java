@@ -12,4 +12,18 @@ package deti.ir.tokenizer;
  */
 public class Tokenizer {
     
+    
+    public Tokenizer(){
+        
+    }
+    
+    public String[] tokenize(String s){
+        String [] tkn = new String[443556]; // so para compilar
+        return tkn;
+    } 
+    
+    public boolean iValid(String token) {
+        //return t.length() > 2 && t.matches("(\\w+)");
+        return true;
+    }
 }

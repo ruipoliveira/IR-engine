@@ -11,5 +11,11 @@ package deti.ir.indexer;
  * @author RuiOliveira
  */
 public class Indexer {
+    public Indexer(){
+        
+    }
     
+    public void addTerm(){
+        
+    }
 }

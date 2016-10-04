@@ -11,4 +11,7 @@ package deti.ir.corpusReader;
  */
 public class CorpusReader {
     
+    public CorpusReader(){
+        
+    }
 }

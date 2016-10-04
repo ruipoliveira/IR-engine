@@ -11,4 +11,11 @@ package deti.ir.stemmer;
  */
 public class Stemmer {
     
+    public Stemmer(){
+        
+    }
+    
+    public String getStemmer(String token){
+        return token;
+    }
 }

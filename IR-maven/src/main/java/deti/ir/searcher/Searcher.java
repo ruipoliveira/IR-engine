@@ -10,5 +10,11 @@ package deti.ir.searcher;
  * @author RuiOliveira
  */
 public class Searcher {
+    public Searcher(){
+        
+    }
     
+    public void search(){
+        
+    }
 }
