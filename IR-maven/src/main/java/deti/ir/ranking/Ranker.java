@@ -15,7 +15,7 @@ public class Ranker {
         
     }
     
-    public void search(){
+    public void OrderResults(){
         
     }
     
