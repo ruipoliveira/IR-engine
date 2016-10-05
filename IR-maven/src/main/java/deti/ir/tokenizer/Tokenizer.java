@@ -22,7 +22,7 @@ public class Tokenizer {
         return tkn;
     } 
     
-    public boolean iValid(String token) {
+    public boolean validate(String token) {
         //return t.length() > 2 && t.matches("(\\w+)");
         return true;
     }

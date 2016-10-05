@@ -10,5 +10,15 @@ package deti.ir.indexer;
  * @author RuiOliveira
  */
 public class TokenIDDocFreqMap {
+    public TokenIDDocFreqMap(){
+        
+    }
     
+    public void addTokenIDDocFreqMap(){
+        
+    }
+    public void updateTokenIDDocFreqMap(){
+        
+    }
+        
 }

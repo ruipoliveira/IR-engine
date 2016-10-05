@@ -1,10 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package deti.ir;
 
+import deti.ir.indexer.Indexer;
+import deti.ir.stemmer.Stemmer;
+import deti.ir.stopWords.StopWords;
 import java.io.BufferedReader;
 import javax.management.Query;
 
@@ -12,7 +10,11 @@ import javax.management.Query;
  *
  * @author gabriel
  */
+
 public class SearcherProcessor {
+    private StopWords sw; 
+    private Stemmer stemmer; 
+    private Indexer indexer; 
     public SearcherProcessor(){
         
     }

@@ -15,7 +15,7 @@ public class Ranker {
         
     }
     
-    public void OrderResults(){
+    public void orderResults(){
         
     }
     

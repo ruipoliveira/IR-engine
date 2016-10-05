@@ -8,8 +8,6 @@ package deti.ir;
 import deti.ir.corpusReader.CorpusReader;
 import deti.ir.indexer.Indexer;
 import deti.ir.memory.MemoryManagement;
-import deti.ir.ranking.Ranker;
-import deti.ir.searcher.Searcher;
 import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
 
