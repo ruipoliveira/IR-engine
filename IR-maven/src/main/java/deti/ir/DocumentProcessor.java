@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package deti.ir;
 
 import deti.ir.corpusReader.CorpusReader;
@@ -13,8 +8,9 @@ import deti.ir.stopWords.StopWords;
 import deti.ir.tokenizer.Tokenizer;
 
 /**
- *
- * @author RuiOliveira
+ * Universidade de Aveiro, DETI, Recuperação de Informação 
+ * @author Gabriel Vieira, gabriel.vieira@ua.pt
+ * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 public class DocumentProcessor {
     
