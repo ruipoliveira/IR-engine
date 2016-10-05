@@ -10,6 +10,7 @@ import deti.ir.indexer.Indexer;
 import deti.ir.memory.MemoryManagement;
 import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
+import deti.ir.tokenizer.Tokenizer;
 
 /**
  *
@@ -46,10 +47,17 @@ public class DocumentProcessor {
     */
     private StopWords sw;
     
+    /**
+    * Tokenizer reference.
+    */
+    private Tokenizer tok; 
+    
     public DocumentProcessor(){
-        cr = new CorpusReader();
-        indexer = new Indexer();
-        memory = new MemoryManagement();
+        this.cr = new CorpusReader();
+        this.indexer = new Indexer();
+        this.memory = new MemoryManagement();
+        this.tok = new Tokenizer(); 
+        
     }
     
     public void start(){
