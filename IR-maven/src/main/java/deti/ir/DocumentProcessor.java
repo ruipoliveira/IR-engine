@@ -30,17 +30,16 @@ public class DocumentProcessor {
         System.out.println(Paths.get(directory).toString()); 
         cr = new CorpusReader(Paths.get(directory));
         
-        
     }
     
     public void start(){
         String s; 
         System.out.println("Document Processor started...");
-        /*
-        for (int i = 0; i < cr.getNrFiles(); i++) {
+        
+        for (int i = 0; i < cr.getNrFiles()-1; i++) {  
             s = cr.getText(i);
             System.out.println(s); 
         }
-*/
+
     }
 }

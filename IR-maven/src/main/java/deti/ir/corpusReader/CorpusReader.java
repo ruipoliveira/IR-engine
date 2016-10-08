@@ -23,17 +23,28 @@ public class CorpusReader {
         files = new ArrayList<>(); 
         // Get Files from directory
         try (Stream<Path> lines = Files.list(path)) {
-            lines.forEach(s -> System.out.println(s));
             lines.forEach(s -> files.add(s));
         } catch (IOException ex) {}
+        
+        System.out.println(files.toString()); 
     }
     
     public String getText(int position){
-        return  "hey"; 
+        String text = "";
+        try (Stream<String> stream = Files.lines(files.get(position))){
+            text = stream.parallel()
+                    .filter(line -> line.length() > 0 && line.charAt(0) != '<')
+                    .map(line -> line.toLowerCase())
+                    .map(line -> line.replaceAll("\\<.*?>", ""))
+                    .map(line -> line.replaceAll(",m2", ""))
+                    .map(line -> line.replaceAll("\"", ""))
+                    .collect(Collectors.joining("\n")
+                    );
+        } catch (IOException ex) {}
+        return text;
     }
     
     public int getNrFiles(){
         return files.size();
-    }
-        
+    }   
 }
