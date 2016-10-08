@@ -33,7 +33,7 @@ public class CorpusReader {
         String text = "";
         try (Stream<String> stream = Files.lines(files.get(position))){
             text = stream.parallel()
-                    .filter(line -> line.length() > 0 && line.charAt(0) != '<')
+                    .filter(line -> line.length() > 0 && line.charAt(0) != '@' )
                     .map(line -> line.toLowerCase())
                     .map(line -> line.replaceAll("\\<.*?>", ""))
                     .map(line -> line.replaceAll(",m2", ""))
