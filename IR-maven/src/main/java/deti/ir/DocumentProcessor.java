@@ -1,11 +1,7 @@
 package deti.ir;
 
 import deti.ir.corpusReader.CorpusReader;
-import deti.ir.indexer.Indexer;
-import deti.ir.memory.MemoryManagement;
-import deti.ir.stemmer.Stemmer;
-import deti.ir.stopWords.StopWords;
-import deti.ir.tokenizer.Tokenizer;
+import java.nio.file.Paths;
 
 /**
  * Universidade de Aveiro, DETI, Recuperação de Informação 
@@ -14,49 +10,37 @@ import deti.ir.tokenizer.Tokenizer;
  */
 public class DocumentProcessor {
     
-    /**
-    * Corpus Reader reference.
-    */
     private final CorpusReader cr;
-    
-    
-    /**
-    * Indexer reference.
-    */
+    /*
     private final Indexer indexer;
 
-    
-    /**
-    * Memory management reference.
-    */
     private final MemoryManagement memory;
-    
-    
-    /**
-    * Stemmer reference.
-    */
+
     private Stemmer stemmer;
-    
-    
-    /**
-    * StopWords reference.
-    */
+
     private StopWords sw;
-    
-    /**
-    * Tokenizer reference.
-    */
+
     private Tokenizer tok; 
+    */
+    private String directory; 
+    private int id; 
     
-    public DocumentProcessor(){
-        this.cr = new CorpusReader();
-        this.indexer = new Indexer();
-        this.memory = new MemoryManagement();
-        this.tok = new Tokenizer(); 
+    
+    public DocumentProcessor(int id, String directory){
+        System.out.println(Paths.get(directory).toString()); 
+        cr = new CorpusReader(Paths.get(directory));
+        
         
     }
     
     public void start(){
-        
+        String s; 
+        System.out.println("Document Processor started...");
+        /*
+        for (int i = 0; i < cr.getNrFiles(); i++) {
+            s = cr.getText(i);
+            System.out.println(s); 
+        }
+*/
     }
 }

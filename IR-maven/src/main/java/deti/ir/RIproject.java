@@ -6,11 +6,12 @@ package deti.ir;
  * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 public class RIproject {
-    private DocumentProcessor dp; 
-    private SearcherProcessor sp; 
+
     
     public static void main(String[]args){
-        System.out.println("Test main"); 
+       DocumentProcessor dp = new DocumentProcessor(2, "C:\\Users\\RuiOliveira\\Google Drive\\RI-2016\\Docs-read\\initial"); 
+       dp.start();
+        
     }
     
 }
