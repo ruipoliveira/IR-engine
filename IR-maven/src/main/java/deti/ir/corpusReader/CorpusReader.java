@@ -44,7 +44,24 @@ public class CorpusReader {
         return text;
     }
     
-    public int getNrFiles(){
+        public String getDocID(int position){
+            String text = "";
+            try (Stream<String> stream = Files.lines(files.get(position))){
+                text = stream.parallel()
+                    .filter(line -> line.length() > 0 && line.charAt(0) != '@' )
+                    .map(line -> line.toLowerCase())
+                    .map(line -> line.replaceAll("\\<.*?>", ""))
+                    .map(line -> line.replaceAll(",m2", ""))
+                    .map(line -> line.replaceAll("\"", ""))
+                    .collect(Collectors.joining("\n")
+                    );
+            } catch (IOException ex) {}
+            return text;
+        }
+        
+    
+    
+    public int getNrCollections(){
         return files.size();
     }   
 }

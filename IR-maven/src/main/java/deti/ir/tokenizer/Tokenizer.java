@@ -14,12 +14,12 @@ public class Tokenizer {
     
     public String[] tokenize(String s) {
         //return s.split(" "); 
-        return s.replaceAll("\\b[a-z0-9]{2}\\b|\\W+", " ").split("(\\s)");
+        return s.split(" "); // replaceAll("\\b[a-z0-9]{2}\\b|\\W+", " ")
     }
 
     public boolean isValid(String t) {
         return t.length() > 2 && t.matches("(\\w+)");
     }
     
-
+    
 }

@@ -6,11 +6,18 @@ package deti.ir.indexer;
  * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 public class Indexer {
+    
+    private final TokenFreqMap[] tokenFreq; 
+    private final TokenIDDocFreqMap[] tokenIdDocFreq; 
+    
+    
     public Indexer(){
+        tokenFreq = new TokenFreqMap[5]; 
+        tokenIdDocFreq = new TokenIDDocFreqMap[5]; 
         
     }
     
-    public void addTerm(){
+    public void addTerm(int docID, String token){
         
     }
 }
