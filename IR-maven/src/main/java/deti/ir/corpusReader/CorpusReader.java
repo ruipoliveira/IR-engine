@@ -36,7 +36,7 @@ public class CorpusReader {
                     .filter(line -> line.length() > 0 && line.charAt(0) != '@' )
                     .map(line -> line.toLowerCase())
                     .map(line -> line.replaceAll("\\<.*?>", ""))
-                    .map(line -> line.replaceAll(",m2", ""))
+                    .map(line -> line.replaceAll(",m[0-9]", ""))
                     .map(line -> line.replaceAll("\"", ""))
                     .collect(Collectors.joining("\n")
                     );
@@ -47,14 +47,12 @@ public class CorpusReader {
         public String getDocID(int position){
             String text = "";
             try (Stream<String> stream = Files.lines(files.get(position))){
-                text = stream.parallel()
-                    .filter(line -> line.length() > 0 && line.charAt(0) != '@' )
-                    .map(line -> line.toLowerCase())
-                    .map(line -> line.replaceAll("\\<.*?>", ""))
-                    .map(line -> line.replaceAll(",m2", ""))
-                    .map(line -> line.replaceAll("\"", ""))
+            
+            text = stream.parallel()
+                    .filter(line -> line.startsWith(","))
                     .collect(Collectors.joining("\n")
                     );
+            
             } catch (IOException ex) {}
             return text;
         }

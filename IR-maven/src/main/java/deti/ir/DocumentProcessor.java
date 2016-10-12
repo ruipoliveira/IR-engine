@@ -41,18 +41,22 @@ public class DocumentProcessor {
         
         for (int i = 0; i < cr.getNrCollections()-1; i++) {  
             s = cr.getText(i);
-            System.out.println(s);
+            //System.out.println(s);
             nrId = cr.getDocID(i); 
             System.out.println("cee"+nrId); 
             
             
+            
+            
             for (String termo : tok.tokenize(s)) {
-                
-                if (termo.length()> 0){
-                    //indexer.addTerm(i, termo);   
-                    //System.out.println(termo); 
+
+                /*
+                if (tok.isDocID(termo)){
+                    System.out.println(termo); 
+                }else{
+                    System.out.println("dasda"); 
                 }
-                    
+                  */  
                 
                 
                 //if (tok.isValid(termo)) {
