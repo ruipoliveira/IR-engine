@@ -9,7 +9,7 @@ public class RIproject {
 
     
     public static void main(String[]args){
-       DocumentProcessor dp = new DocumentProcessor(2, "C:\\Users\\RuiOliveira\\Google Drive\\RI-2016\\Docs-read\\initial"); 
+       DocumentProcessor dp = new DocumentProcessor(2, "/home/gabriel/NetBeansProjects/IR-engine/IR-maven/src/main/java/Docs"); 
        dp.start();
         
     }

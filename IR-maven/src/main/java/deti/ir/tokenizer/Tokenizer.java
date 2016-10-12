@@ -1,5 +1,7 @@
 package deti.ir.tokenizer;
 
+import deti.ir.corpusReader.CorpusReader;
+
 /**
  * Universidade de Aveiro, DETI, Recuperação de Informação 
  * @author Gabriel Vieira, gabriel.vieira@ua.pt
@@ -19,7 +21,16 @@ public class Tokenizer {
     
     
     public boolean isDocID(String t) {
-        return t.split(",")[0].equals("12086134") ; 
+        String cenas[] = t.split(",");
+        String id = cenas[0];
+        
+        /*String s = "";
+        for(char c : t.toCharArray()){
+            if(Character.isDigit(c))
+                s = s + c;           
+        }*/
+        return  id.matches("[0-9]");
+        //return t.split(",")[0].matches(t.) ;
     }
     
     

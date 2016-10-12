@@ -39,9 +39,9 @@ public class DocumentProcessor {
         String s, nrId; 
         System.out.println("Document Processor started...");
         
-        for (int i = 0; i < cr.getNrCollections()-1; i++) {  
+        for (int i = 0; i < cr.getNrCollections(); i++) {  
             s = cr.getText(i);
-            //System.out.println(s);
+            System.out.println(s);
             nrId = cr.getDocID(i); 
             System.out.println("cee"+nrId); 
             
@@ -50,10 +50,10 @@ public class DocumentProcessor {
             
             for (String termo : tok.tokenize(s)) {
 
-                /*
+                //System.out.println(termo);
                 if (tok.isDocID(termo)){
                     System.out.println(termo); 
-                }else{
+                }/*else{
                     System.out.println("dasda"); 
                 }
                   */  
