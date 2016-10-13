@@ -8,7 +8,7 @@ package deti.ir;
 public class RIproject {
     public static void main(String[]args){
         
-       DocumentProcessor dp = new DocumentProcessor(2, System.getProperty("user.dir")+"/files-data/corpus"); 
+       DocumentProcessor dp = new DocumentProcessor(2, System.getProperty("user.dir")+"/files-data/corpus", System.getProperty("user.dir")+"/files-data/stopwords_en.txt"); 
        dp.start();
     }
     

@@ -1,9 +1,10 @@
-
 package deti.ir.stopWords;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -13,15 +14,17 @@ import java.util.stream.Stream;
  */
 public class StopWords {
     
-    ArrayList<String> stopWords; // array list de stop words de stop words
+    List<String> stopWords; // array list de stop words de stop words
     
-    public StopWords(Path dirPath) throws Exception{
+    public StopWords(Path dirPath) {
         stopWords = new ArrayList<>();
         
         // obter ficheiros de um dado directorio
         try(Stream<String> lines = Files.lines(dirPath)){
             lines.filter(line -> line.length() > 2).forEach(s -> stopWords.add(s));
-        }   
+        }catch(IOException e) {}
+        
+        System.out.println("List of stop words:"+stopWords.toString());
     }
     
             // verificar se e stop word

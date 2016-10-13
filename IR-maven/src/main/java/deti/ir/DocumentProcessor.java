@@ -2,7 +2,9 @@ package deti.ir;
 
 import deti.ir.corpusReader.CorpusReader;
 import deti.ir.indexer.Indexer;
+import deti.ir.stopWords.StopWords;
 import deti.ir.tokenizer.Tokenizer;
+import java.io.IOException;
 import java.nio.file.Paths;
 
 /**
@@ -20,19 +22,22 @@ public class DocumentProcessor {
 
     private Stemmer stemmer;
 
-    private StopWords sw;
+    
     */ 
     private Tokenizer tok; 
+    private StopWords sw;
     
     private String directory; 
     private int id; 
 
     
-    public DocumentProcessor(int id, String directory){
+    public DocumentProcessor(int id, String directory, String stopWords_dir) {
         //System.out.println(Paths.get(directory).toString()); 
         cr = new CorpusReader(Paths.get(directory));
         tok = new Tokenizer(); 
-        indexer = new Indexer(); 
+        indexer = new Indexer();
+        
+        sw = new StopWords(Paths.get(stopWords_dir));
     }
     
     public void start(){
