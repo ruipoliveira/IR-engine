@@ -43,15 +43,15 @@ public class DocumentProcessor {
             collection = cr.getText(i);
 
             for(String doc : tok.tokenizeDoc(collection)){
-                
-                
+                               
                 int pos = doc.indexOf(",");
                 if (pos != -1){
                     nrId = doc.substring(0, pos); 
                     //System.out.println("ID:"+doc.substring(0, pos)); 
-                    doc = doc.substring(pos+1, doc.length()); 
+                    doc = doc.substring(pos+1, doc.length()); // restante documento
                     //System.out.println(doc);
                     
+                    // coloca apenas os termos do resto do documento e percorre-os todos
                     for (String termo : tok.tokenizeTermo(doc)){
                         System.out.println("ID #"+nrId+ " Termo: "+termo); 
                     }

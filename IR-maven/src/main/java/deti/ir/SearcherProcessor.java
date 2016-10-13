@@ -5,6 +5,7 @@ import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
 import deti.ir.tokenizer.Tokenizer;
 import java.io.BufferedReader;
+import java.nio.file.Path;
 import javax.management.Query;
 
 /**
@@ -17,12 +18,13 @@ public class SearcherProcessor {
     private Stemmer stemmer; 
     private Indexer indexer; 
     private Tokenizer tok; 
+    private Path path;
     
-    public SearcherProcessor(){
+    public SearcherProcessor() throws Exception{
         this.tok = new Tokenizer(); 
         this.indexer = new Indexer();
         this.stemmer = new Stemmer();
-        this.sw = new StopWords(); 
+        this.sw = new StopWords(path); 
     }
     
     public void start(){
