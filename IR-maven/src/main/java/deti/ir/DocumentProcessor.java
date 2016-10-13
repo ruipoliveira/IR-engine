@@ -29,40 +29,41 @@ public class DocumentProcessor {
 
     
     public DocumentProcessor(int id, String directory){
-        System.out.println(Paths.get(directory).toString()); 
+        //System.out.println(Paths.get(directory).toString()); 
         cr = new CorpusReader(Paths.get(directory));
         tok = new Tokenizer(); 
         indexer = new Indexer(); 
     }
     
     public void start(){
-        String s, nrId; 
+        String collection, nrId; 
         System.out.println("Document Processor started...");
         
         for (int i = 0; i < cr.getNrCollections(); i++) {  
-            s = cr.getText(i);
-            System.out.println(s);
-            nrId = cr.getDocID(i); 
-            System.out.println("cee"+nrId); 
-            
-            
-            
-            
-            for (String termo : tok.tokenize(s)) {
+            collection = cr.getText(i);
 
-                //System.out.println(termo);
-                if (tok.isDocID(termo)){
-                    System.out.println(termo); 
-                }/*else{
-                    System.out.println("dasda"); 
+            for(String doc : tok.tokenizeDoc(collection)){
+                
+                
+                int pos = doc.indexOf(",");
+                if (pos != -1){
+                    nrId = doc.substring(0, pos); 
+                    //System.out.println("ID:"+doc.substring(0, pos)); 
+                    doc = doc.substring(pos+1, doc.length()); 
+                    //System.out.println(doc);
+                    
+                    for (String termo : tok.tokenizeTermo(doc)){
+                        System.out.println("ID #"+nrId+ " Termo: "+termo); 
+                    }
+                    
                 }
-                  */  
+                    
                 
-                
-                //if (tok.isValid(termo)) {
-                //    //indexa todos os termos
-                //}
             }
+            
+     
+              
+
         }
 
     }

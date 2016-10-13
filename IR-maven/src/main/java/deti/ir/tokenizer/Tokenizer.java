@@ -14,27 +14,16 @@ public class Tokenizer {
         
     }
     
-    public String[] tokenize(String s) {
-        //return s.split(" "); 
-        return s.split(" "); // replaceAll("\\b[a-z0-9]{2}\\b|\\W+", " ")
+    public String[] tokenizeDoc(String s) {
+        return s.split("\n");
     }
     
     
-    public boolean isDocID(String t) {
-        String cenas[] = t.split(",");
-        String id = cenas[0];
+    public String[] tokenizeTermo(String s) {
+        return s.split(" ");
+    }
         
-        /*String s = "";
-        for(char c : t.toCharArray()){
-            if(Character.isDigit(c))
-                s = s + c;           
-        }*/
-        return  id.matches("[0-9]");
-        //return t.split(",")[0].matches(t.) ;
-    }
-    
-    
-
+   
     public boolean isValid(String t) {
         return t.length() > 2 && t.matches("(\\w+)");
     }
