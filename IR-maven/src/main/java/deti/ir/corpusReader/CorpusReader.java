@@ -39,6 +39,7 @@ public class CorpusReader {
                     .map(line -> line.replaceAll("\\<.*?>", ""))
                     .map(line -> line.replaceAll(",m[0-9]", ""))
                     .map(line -> line.replaceAll("\"", ""))
+                    .map(line -> line.replaceAll("[.!?\\-]", ""))
                     .collect(Collectors.joining("\n")
                     );
         } catch (IOException ex) {}
