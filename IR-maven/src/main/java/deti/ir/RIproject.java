@@ -9,9 +9,9 @@ public class RIproject {
 
     
     public static void main(String[]args){
-       DocumentProcessor dp = new DocumentProcessor(2, "/home/gabriel/NetBeansProjects/IR-engine/IR-maven/src/main/java/Docs"); 
-       dp.start();
         
+       DocumentProcessor dp = new DocumentProcessor(2, System.getProperty("user.dir")+"/files-data/corpus"); 
+       dp.start();
     }
     
 }

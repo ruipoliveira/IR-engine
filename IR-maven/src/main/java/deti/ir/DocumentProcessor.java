@@ -29,7 +29,7 @@ public class DocumentProcessor {
 
     
     public DocumentProcessor(int id, String directory){
-        //System.out.println(Paths.get(directory).toString()); 
+        System.out.println(Paths.get(directory).toString()); 
         cr = new CorpusReader(Paths.get(directory));
         tok = new Tokenizer(); 
         indexer = new Indexer(); 
