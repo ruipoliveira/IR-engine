@@ -35,15 +35,13 @@ public class CorpusReader {
             text = stream.parallel()
                     .filter(line -> line.length() > 0 && line.charAt(0) != '@' )
                     .map(line -> line.toLowerCase())
+                  //  .map(line -> line.replaceAll(",", ""))
                     .map(line -> line.replaceAll("\\<.*?>", ""))
                     .map(line -> line.replaceAll("\\<.*?>", ""))
                     .map(line -> line.replaceAll(",m[0-9]", ""))
                     .map(line -> line.replaceAll("\"", ""))
-                    .map(line -> line.replaceAll("[.!?\\-]", ""))
-                    .map(line -> line.replaceAll("\\[", "").replaceAll("\\]",""))
-                    .map(line -> line.replaceAll("\\(", "").replaceAll("\\)",""))
-                    .map(line -> line.replaceAll("\\;", ""))
-                    .map(line -> line.replaceAll("\\:", ""))
+                    .map(line -> line.replaceAll(",", " "))
+                    .map(line -> line.replaceAll("[.!?\\-\\;\\:\\(\\)\\[\\]]", ""))
                     .collect(Collectors.joining("\n")
                     );
         } catch (IOException ex) {}

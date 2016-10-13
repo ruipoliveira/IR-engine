@@ -36,7 +36,7 @@ public class DocumentProcessor {
     }
     
     public void start(){
-        String collection, nrId; 
+        String collection, idDoc; 
         System.out.println("Document Processor started...");
         
         for (int i = 0; i < cr.getNrCollections(); i++) {  
@@ -44,16 +44,20 @@ public class DocumentProcessor {
 
             for(String doc : tok.tokenizeDoc(collection)){
                                
-                int pos = doc.indexOf(",");
+                int pos = doc.indexOf(" ");
                 if (pos != -1){
-                    nrId = doc.substring(0, pos); 
+                    idDoc = doc.substring(0, pos); 
                     //System.out.println("ID:"+doc.substring(0, pos)); 
                     doc = doc.substring(pos+1, doc.length()); // restante documento
                     //System.out.println(doc);
                     
                     // coloca apenas os termos do resto do documento e percorre-os todos
                     for (String termo : tok.tokenizeTermo(doc)){
-                        System.out.println("ID #"+nrId+ " Termo: "+termo); 
+                        if (tok.isValid(termo)){
+                           System.out.println("ID #"+idDoc+ " Termo: "+termo); 
+                           //indexer.addTerm(Integer.parseInt(idDoc), termo);
+                        }
+                                
                     }
                     
                 }
