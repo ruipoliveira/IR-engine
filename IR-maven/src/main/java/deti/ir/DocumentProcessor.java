@@ -59,21 +59,15 @@ public class DocumentProcessor {
                     // coloca apenas os termos do resto do documento e percorre-os todos
                     for (String termo : tok.tokenizeTermo(doc)){
                         if (tok.isValid(termo)){
-                           System.out.println("ID #"+idDoc+ " Termo: "+termo); 
-                           //indexer.addTerm(Integer.parseInt(idDoc), termo);
-                        }
-                                
+                           //System.out.println("ID #"+idDoc+ " Termo: "+termo); 
+                           indexer.addTerm(Integer.parseInt(idDoc), termo);
+                        }   
                     }
-                    
                 }
-                    
-                
             }
-            
-     
-              
-
         }
 
+        indexer.generateFileTokenFreqDocs();
+        indexer.generateFileTokenFreq(); 
     }
 }
