@@ -2,6 +2,7 @@ package deti.ir;
 
 import deti.ir.corpusReader.CorpusReader;
 import deti.ir.indexer.Indexer;
+import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
 import deti.ir.tokenizer.Tokenizer;
 import java.io.IOException;
@@ -17,19 +18,18 @@ public class DocumentProcessor {
     private final CorpusReader cr;
     
     private final Indexer indexer;
-    /*
-    private final MemoryManagement memory;
-
-    private Stemmer stemmer;
-
     
-    */ 
-    private Tokenizer tok; 
+    private Tokenizer tok;
+    
     private StopWords sw;
     
+    private final Stemmer stemmer;
+    /*
+    private final MemoryManagement memory;
+    
+    */   
     private String directory; 
     private int id; 
-
     
     public DocumentProcessor(int id, String directory, String stopWords_dir) {
         //System.out.println(Paths.get(directory).toString()); 
@@ -38,6 +38,7 @@ public class DocumentProcessor {
         indexer = new Indexer();
         
         sw = new StopWords(Paths.get(stopWords_dir));
+        stemmer = new Stemmer();
     }
     
     public void start(){
@@ -60,6 +61,7 @@ public class DocumentProcessor {
                     for (String termo : tok.tokenizeTermo(doc)){
                         if (tok.isValid(termo)){
                             if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
+                                termo = stemmer.getStemmer(termo);
                                 System.out.println("ID #"+idDoc+ " Termo: "+termo); 
                                 indexer.addTerm(Integer.parseInt(idDoc), termo);
                             }   
