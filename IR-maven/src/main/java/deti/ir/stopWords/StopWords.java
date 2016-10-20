@@ -24,7 +24,7 @@ public class StopWords {
             lines.filter(line -> line.length() > 2).forEach(s -> stopWords.add(s));
         }catch(IOException e) {}
         
-        System.out.println("List of stop words:"+stopWords.toString());
+        //System.out.println("List of stop words:"+stopWords.toString());
     }
     
             // verificar se e stop word

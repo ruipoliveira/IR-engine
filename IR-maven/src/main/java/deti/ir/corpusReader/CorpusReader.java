@@ -1,5 +1,6 @@
 package deti.ir.corpusReader;
 
+import deti.ir.indexer.DocIDPath;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -19,6 +20,7 @@ public class CorpusReader {
     
     List<Path> files;
     
+    
     public CorpusReader(Path path){
         files = new ArrayList<>(); 
         // Get Files from directory
@@ -26,11 +28,12 @@ public class CorpusReader {
             lines.forEach(s -> files.add(s));
         } catch (IOException ex) {}
         
-        System.out.println(files.toString()); 
+       // System.out.println(files); 
     }
     
     public String getText(int position){
         String text = "";
+        //System.out.println(position+"-->"+files.get(position)); 
         try (Stream<String> stream = Files.lines(files.get(position))){
             text = stream.parallel()
                     .filter(line -> line.length() > 0 && line.charAt(0) != '@' )
@@ -48,6 +51,9 @@ public class CorpusReader {
         return text;
     }
 
+    public String getPath(int position){
+        return files.get(position).toString(); 
+    }
     
     public int getNrCollections(){
         return files.size();

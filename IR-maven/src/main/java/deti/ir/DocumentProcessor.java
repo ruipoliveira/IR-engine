@@ -1,12 +1,15 @@
 package deti.ir;
 
 import deti.ir.corpusReader.CorpusReader;
+import deti.ir.indexer.DocIDPath;
 import deti.ir.indexer.Indexer;
 import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
 import deti.ir.tokenizer.Tokenizer;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Universidade de Aveiro, DETI, Recuperação de Informação 
@@ -24,6 +27,9 @@ public class DocumentProcessor {
     private StopWords sw;
     
     private final Stemmer stemmer;
+    
+    List<DocIDPath> docIdpath; 
+    
     /*
     private final MemoryManagement memory;
     
@@ -39,6 +45,8 @@ public class DocumentProcessor {
         
         sw = new StopWords(Paths.get(stopWords_dir));
         stemmer = new Stemmer();
+        
+        docIdpath = new LinkedList<>(); 
     }
     
     public void start(){
@@ -47,7 +55,6 @@ public class DocumentProcessor {
         
         for (int i = 0; i < cr.getNrCollections(); i++) {  
             collection = cr.getText(i);
-
             for(String doc : tok.tokenizeDoc(collection)){
                                
                 int pos = doc.indexOf(" ");
@@ -57,13 +64,17 @@ public class DocumentProcessor {
                     doc = doc.substring(pos+1, doc.length()); // restante documento
                     //System.out.println(doc);
                     
+                    //System.out.println(idDoc +"dds"+cr.getPath(i)); 
+                    docIdpath.add(new DocIDPath(i, idDoc, cr.getPath(i))); 
+
                     // coloca apenas os termos do resto do documento e percorre-os todos
                     for (String termo : tok.tokenizeTermo(doc)){
                         if (tok.isValid(termo)){
                             if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
                                 termo = stemmer.getStemmer(termo);
-                                System.out.println("ID #"+idDoc+ " Termo: "+termo); 
-                                indexer.addTerm(Integer.parseInt(idDoc), termo);
+                                //System.out.println("ID #"+i+idDoc+ " Termo: "+termo); 
+                                indexer.addTerm(Integer.parseInt(i+idDoc), termo);
+                                
                             }   
                         }
                     }
@@ -73,5 +84,10 @@ public class DocumentProcessor {
 
         indexer.generateFileTokenFreqDocs();
         indexer.generateFileTokenFreq(); 
+        //System.out.println(docIdpath.toString());
+    }
+    
+    public List<DocIDPath> getListPath(){
+        return docIdpath;
     }
 }

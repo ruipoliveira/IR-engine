@@ -20,7 +20,6 @@ public class Indexer {
         tokenIDDocFreq = new TokenIDDocFreqMap();
 
     }
-
     
     public void addTerm(int docID, String token) {
         tokenFreq.merge(token, 1, (a, b) -> a + b);
