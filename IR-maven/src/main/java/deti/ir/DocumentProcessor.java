@@ -3,10 +3,10 @@ package deti.ir;
 import deti.ir.corpusReader.CorpusReader;
 import deti.ir.indexer.DocIDPath;
 import deti.ir.indexer.Indexer;
+import deti.ir.memory.MemoryManagement;
 import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
 import deti.ir.tokenizer.Tokenizer;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,22 +30,19 @@ public class DocumentProcessor {
     
     List<DocIDPath> docIdpath; 
     
-    /*
     private final MemoryManagement memory;
-    
-    */   
+       
     private String directory; 
     private int id; 
     
-    public DocumentProcessor(int id, String directory, String stopWords_dir) {
+    public DocumentProcessor(String directory, String stopWords_dir) {
         //System.out.println(Paths.get(directory).toString()); 
         cr = new CorpusReader(Paths.get(directory));
         tok = new Tokenizer(); 
         indexer = new Indexer();
-        
         sw = new StopWords(Paths.get(stopWords_dir));
-        stemmer = new Stemmer();
-        
+        stemmer = new Stemmer("englishStemmer");
+        memory = new MemoryManagement(); 
         docIdpath = new LinkedList<>(); 
     }
     
@@ -82,8 +79,11 @@ public class DocumentProcessor {
             }
         }
 
+        
+        //System.out.println(memory.getCurrentMemory()); 
+        
         indexer.generateFileTokenFreqDocs();
-        indexer.generateFileTokenFreq(); 
+        //indexer.generateFileTokenFreq(); 
         //System.out.println(docIdpath.toString());
     }
     

@@ -15,8 +15,8 @@ public class Stemmer {
     private final String algorithm;
     
     // podia ser passado por parametro mas apenas vai ser usado o english stemmer
-    public Stemmer(){
-        algorithm = "englishStemmer"; 
+    public Stemmer(String algorithm){
+        this.algorithm = algorithm;  
     }
     
     public String getStemmer(String token){
@@ -32,4 +32,10 @@ public class Stemmer {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {}
         return token;
     }
+
+    public String getAlgorithm() {
+        return algorithm;
+    }
+    
+    
 }

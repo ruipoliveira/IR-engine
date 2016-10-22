@@ -50,8 +50,7 @@ public class TokenFreqMap extends HashMap<String, Integer> {
         try {
             Properties p = new Properties();
             p.load(new FileInputStream("TokenFreq"));
-            for (String key: p.stringPropertyNames())
-            {
+            for (String key: p.stringPropertyNames()){
                 this.put(key, Integer.parseInt(p.getProperty(key)));
             }
         } catch (FileNotFoundException ex) {

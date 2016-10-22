@@ -23,7 +23,7 @@ public class SearcherProcessor {
     public SearcherProcessor() throws Exception{
         this.tok = new Tokenizer(); 
         this.indexer = new Indexer();
-        this.stemmer = new Stemmer();
+        this.stemmer = new Stemmer("englishStemmer");
         this.sw = new StopWords(path); 
     }
     

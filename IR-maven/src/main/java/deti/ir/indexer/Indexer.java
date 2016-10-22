@@ -38,7 +38,6 @@ public class Indexer {
         return hm;
     }
 
-
     public void generateFileTokenFreq() {
         TokenFreqMap tk = new TokenFreqMap();
         tk.loadTokenFreq();
@@ -64,4 +63,13 @@ public class Indexer {
         tokenIDDocFreq.storeTokenIDDocFreq(true);
         tokenIDDocFreq.clear();
     }
+
+    public TokenIDDocFreqMap getTokenIDDocFreq() {
+        return tokenIDDocFreq;
+    }
+
+    public TokenFreqMap getTokenFreq() {
+        return tokenFreq;
+    }
+    
 }

@@ -42,7 +42,7 @@ public class TokenIDDocFreqMap extends HashMap<String, HashMap<Integer, Integer>
                 for (Map.Entry<Integer, Integer> fl: entry.getValue().entrySet())
                 {
                     total+=fl.getValue(); 
-                    freqL += fl.getKey() + "-";
+                    freqL += fl.getKey() + ",";
                 }
                 p.put(entry.getKey()+";"+total+";"+freqL,"");
             }

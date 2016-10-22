@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 public class StopWords {
-    
+
     List<String> stopWords; // array list de stop words de stop words
     
     public StopWords(Path dirPath) {
@@ -27,7 +27,7 @@ public class StopWords {
         //System.out.println("List of stop words:"+stopWords.toString());
     }
     
-            // verificar se e stop word
+    // verificar se e stop word
     public boolean isStopWord(String token){
         return stopWords.contains(token);
     }
@@ -40,4 +40,14 @@ public class StopWords {
     public boolean StopListEmpty(){
         return stopWords.isEmpty();
     }
+    
+    public List<String> getStopWords() {
+        return stopWords;
+    }
+
+    public void setStopWords(List<String> stopWords) {
+        this.stopWords = stopWords;
+    }
+    
+    
 }
