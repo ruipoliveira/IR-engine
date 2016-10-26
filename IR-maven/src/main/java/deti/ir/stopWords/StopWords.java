@@ -16,6 +16,10 @@ public class StopWords {
 
     List<String> stopWords; // array list de stop words de stop words
     
+    /**
+     * Construtor das stopwords que recebe o caminho para a lista de stopwords a ser usada
+     * @param dirPath 
+     */
     public StopWords(Path dirPath) {
         stopWords = new ArrayList<>();
         
@@ -27,20 +31,35 @@ public class StopWords {
         //System.out.println("List of stop words:"+stopWords.toString());
     }
     
-    // verificar se e stop word
+    /**
+     * metodo que verifica se um termo (token) é stop word
+     * @param token
+     * @return 
+     */
     public boolean isStopWord(String token){
         return stopWords.contains(token);
     }
     
+    /**
+     * metodo que retorna o tamanho da lista de stop words
+     * @return 
+     */
     public int getSize(){
         return stopWords.size();
     }
     
-     
+    /**
+     * Metodo que verifica se a lista de stop words esta vazia (nao usado)
+     * @return 
+     */ 
     public boolean StopListEmpty(){
         return stopWords.isEmpty();
     }
     
+    /**
+     * Metodo que retorna a lista de stopwords
+     * @return 
+     */
     public List<String> getStopWords() {
         return stopWords;
     }

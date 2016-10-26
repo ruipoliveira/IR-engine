@@ -16,11 +16,18 @@ import java.util.TreeSet;
  * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 public class TokenIDDocFreqMap extends HashMap<String, HashMap<Integer, Integer>> {
-
+    
+    /**
+     * Constructor do TokenIDDocFreqMap
+     */
     public TokenIDDocFreqMap(){
         super();
     }
     
+    /**
+     * Metodo para armazenar a frequencia do token e sua posting list
+     * @param sortedStore 
+     */
     public void storeTokenIDDocFreq(boolean sortedStore){
         try {
             Properties p;
@@ -53,7 +60,9 @@ public class TokenIDDocFreqMap extends HashMap<String, HashMap<Integer, Integer>
     }
     
     
-    
+    /**
+     * Metodo que carrega a frequencia do token e sua posting list
+     */
     public void loadTokenIDDocFreq(){
         try {
             Properties p = new Properties();
@@ -71,7 +80,10 @@ public class TokenIDDocFreqMap extends HashMap<String, HashMap<Integer, Integer>
         } catch (IOException ex) {}
     }
     
-
+    /**
+      * Metodo que faz o merge da freq do token e sua posting list
+      * @param tfm 
+      */
     public void mergeTokenIDDocFreq(TokenIDDocFreqMap trm){
         for(String s : trm.keySet()){
             HashMap<Integer,Integer> temp = this.get(s);

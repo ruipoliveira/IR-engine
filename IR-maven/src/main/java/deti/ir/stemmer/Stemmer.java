@@ -14,11 +14,19 @@ public class Stemmer {
      */
     private final String algorithm;
     
-    // podia ser passado por parametro mas apenas vai ser usado o english stemmer
+    /**
+     * Construtor do Stemmer que recebe o algoritmo a ser usado para o stemming dos termos
+     * @param algorithm 
+     */
     public Stemmer(String algorithm){
         this.algorithm = algorithm;  
     }
     
+    /**
+     * metodo que retorna o termo ja tokenizado
+     * @param token
+     * @return token
+     */
     public String getStemmer(String token){
         Class stemClass;
         try {
@@ -32,7 +40,11 @@ public class Stemmer {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {}
         return token;
     }
-
+    
+    /**
+     * metodo que retorna o algoritmo de tokenizacao
+     * @return 
+     */
     public String getAlgorithm() {
         return algorithm;
     }

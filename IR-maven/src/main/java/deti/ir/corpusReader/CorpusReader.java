@@ -17,7 +17,11 @@ import java.util.stream.Collectors;
 public class CorpusReader {
     
     List<Path> files;
-    
+
+    /**
+     * Constructor do CorpusReader que recebe o caminho onde os ficheiros a serem lidos se situa
+     * @param path 
+     */
     public CorpusReader(Path path){
         // Get Files from directory
         files = new ArrayList<>(); 
@@ -27,6 +31,11 @@ public class CorpusReader {
        // System.out.println(files); 
     }
     
+    /**
+     * função para obter o texto de cada ficheiro
+     * @param position
+     * @return txt
+     */
     public String getText(int position){
         String txt = "";
         //System.out.println(position+"-->"+files.get(position)); 
@@ -46,11 +55,20 @@ public class CorpusReader {
         } catch (IOException ex) {}
         return txt;
     }
-
+    
+    /**
+     * retorna o caminho para cada ficheiro em forma de String
+     * @param position
+     * @return files.get(position).toString(); 
+     */
     public String getPath(int position){
         return files.get(position).toString(); 
     }
-    
+  
+    /**
+     * retorna o numero total de ficheiros a serem lidos
+     * @return files.size()
+     */
     public int getNrCollections(){
         return files.size();
     }

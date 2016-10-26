@@ -18,10 +18,17 @@ import java.util.TreeSet;
  */
 public class TokenFreqMap extends HashMap<String, Integer> {
 
+    /**
+     * Constructor do TokenFreqMap
+     */
     public TokenFreqMap() {
         super();
     }
     
+    /**
+     * Metodo para armazenar a frequencia do token
+     * @param sortedStore 
+     */
     public void storeTokenFreq(boolean sortedStore){
         try {
             Properties p;
@@ -45,7 +52,9 @@ public class TokenFreqMap extends HashMap<String, Integer> {
         } catch (IOException ex) {}
     }
     
-    
+    /**
+     * Metodo que carrega a frequencia do token
+     */
     public void loadTokenFreq(){
         try {
             Properties p = new Properties();
@@ -56,7 +65,10 @@ public class TokenFreqMap extends HashMap<String, Integer> {
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {}
     }
-    
+     /**
+      * Metodo que faz o merge da freq do token
+      * @param tfm 
+      */
     public void mergeTokenFreq(TokenFreqMap tfm){
         tfm.forEach((k,v) -> this.merge(k,v, (a,b) -> a+b));
     }
