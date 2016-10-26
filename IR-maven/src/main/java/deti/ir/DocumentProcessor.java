@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class DocumentProcessor {
     
-    private final CorpusReader cr;
+    private final CorpusReader cr; 
     
     private final Indexer indexer;
     
@@ -34,7 +34,11 @@ public class DocumentProcessor {
        
     private String directory; 
     private int id; 
-    
+    /**
+     * Construtor para o fluxo de processamento
+     * @param directory
+     * @param stopWords_dir 
+     */
     public DocumentProcessor(String directory, String stopWords_dir) {
         //System.out.println(Paths.get(directory).toString()); 
         cr = new CorpusReader(Paths.get(directory));
@@ -45,7 +49,9 @@ public class DocumentProcessor {
         memory = new MemoryManagement(); 
         docIdpath = new LinkedList<>(); 
     }
-    
+    /**
+     * Método que inicia processamento
+     */
     public void start(){
         String collection, idDoc; 
         System.out.println("Document Processor started...");
@@ -86,7 +92,10 @@ public class DocumentProcessor {
         //indexer.generateFileTokenFreq(); 
         //System.out.println(docIdpath.toString());
     }
-    
+    /**
+     * Retorna lista de 
+     * @return List<DocIDPath>
+     */
     public List<DocIDPath> getListPath(){
         return docIdpath;
     }
