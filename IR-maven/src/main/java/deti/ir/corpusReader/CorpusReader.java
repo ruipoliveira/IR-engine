@@ -1,12 +1,15 @@
 package deti.ir.corpusReader;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import org.apache.commons.csv.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 
 /**
@@ -23,12 +26,13 @@ public class CorpusReader {
      * @param path 
      */
     public CorpusReader(Path path){
+        //System.out.println(path); 
         // Get Files from directory
         files = new ArrayList<>(); 
         try (Stream<Path> lines = Files.list(path)) {
             lines.forEach(s -> files.add(s));
         } catch (IOException ex) {}
-       // System.out.println(files); 
+        System.out.println(files); 
     }
     
     /**
@@ -36,13 +40,27 @@ public class CorpusReader {
      * @param position
      * @return txt
      */
-    public String getText(int position){
+    public String getText(int position) throws IOException{
         String txt = "";
-        //System.out.println(position+"-->"+files.get(position)); 
+        System.out.println(position+"-->"+files.get(position)); 
+       
+        
+        CSVParser parser = new CSVParser(new FileReader(files.get(position).toString()), CSVFormat.DEFAULT.withHeader());
+        
+        System.out.print(parser);
+        for (CSVRecord record : parser) {
+        //System.out.println(record.get("Id")+"->"+record.get("Body"));
+        }
+        parser.close();
+
+        System.out.println("LEU tudo!"); 
+
+        /*
         try (Stream<String> stream = Files.lines(files.get(position))){
             txt = stream.parallel()
-                    .filter(line -> line.length() > 0 && line.charAt(0) != '@' )
-                    .map(line -> line.toLowerCase())
+                    .filter(line -> line.length() > 0 )
+                    .map(line -> { System.out.println(line);  return line.toLowerCase(); }) 
+                    
                   //  .map(line -> line.replaceAll(",", ""))
                     .map(line -> line.replaceAll("\\<.*?>", ""))
                     .map(line -> line.replaceAll("\\<.*?>", ""))
@@ -50,10 +68,20 @@ public class CorpusReader {
                     .map(line -> line.replaceAll("\"", ""))
                     .map(line -> line.replaceAll(",", " "))
                     .map(line -> line.replaceAll("[.!?\\-\\;\\:\\(\\)\\[\\]]", ""))
+                    
+
                     .collect(Collectors.joining("\n")
                     );
-        } catch (IOException ex) {}
+        } catch (Exception ex) {}
+        */
         return txt;
+    }
+    
+    
+    public String processorBodyAndTitle(String bodytitle){
+        Document doc = Jsoup.parse(bodytitle); 
+        doc.select("pre").remove(); 
+        return Jsoup.parse(doc.toString()).text().toLowerCase(); 
     }
     
     /**

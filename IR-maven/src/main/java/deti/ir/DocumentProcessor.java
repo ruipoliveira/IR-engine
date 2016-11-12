@@ -7,9 +7,14 @@ import deti.ir.memory.MemoryManagement;
 import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
 import deti.ir.tokenizer.Tokenizer;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.commons.csv.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  * Universidade de Aveiro, DETI, Recuperação de Informação 
@@ -51,15 +56,38 @@ public class DocumentProcessor {
     }
     /**
      * Método que inicia processamento
+     * @throws java.io.IOException
      */
-    public void start(){
+    public void start() throws IOException{
         String collection, idDoc; 
         System.out.println("Document Processor started...");
         
-        for (int i = 0; i < cr.getNrCollections(); i++) {  
-            collection = cr.getText(i);
-            for(String doc : tok.tokenizeDoc(collection)){
-                               
+        for (int i = 0; i < cr.getNrCollections(); i++) {
+            CSVParser parser = new CSVParser(new FileReader(cr.getPath(i)), CSVFormat.DEFAULT.withHeader());
+            
+            for (CSVRecord record : parser) {
+                if (record.isMapped("Title")){ // 'Questions.csv':
+                    System.out.println(i+"->"+record.get("Id")+"->"+cr.processorBodyAndTitle(record.get("Title")+" "+record.get("Body"))); 
+
+                }else{ // 'Answers.csv':
+                   
+                    System.out.println(i+"->"+record.get("Id")+"->"+cr.processorBodyAndTitle(record.get("Body"))); 
+
+                }    
+                
+            }
+            
+            parser.close();
+            
+            
+
+            
+            
+            
+            //for(String doc : tok.tokenizeDoc(collection)){
+              //  System.out.println(doc);
+                
+                /*
                 int pos = doc.indexOf(" ");
                 if (pos != -1){
                     idDoc = doc.substring(0, pos); 
@@ -82,15 +110,19 @@ public class DocumentProcessor {
                         }
                     }
                 }
-            }
+                */
+           // }
         }
 
         
         //System.out.println(memory.getCurrentMemory()); 
         
-        indexer.generateFileTokenFreqDocs();
+        //indexer.generateFileTokenFreqDocs();
         //indexer.generateFileTokenFreq(); 
         //System.out.println(docIdpath.toString());
+        
+        
+
     }
     /**
      * Retorna lista de 

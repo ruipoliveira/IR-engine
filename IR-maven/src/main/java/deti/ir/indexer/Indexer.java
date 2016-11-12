@@ -89,6 +89,7 @@ public class Indexer {
         tokenIDDocFreq.clear();
     }
     
+      
     /**
      * metodo que retorna o tokenIDDocFreq
      * @return 
