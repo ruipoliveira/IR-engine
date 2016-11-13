@@ -81,7 +81,12 @@ public class CorpusReader {
     public String processorBodyAndTitle(String bodytitle){
         Document doc = Jsoup.parse(bodytitle); 
         doc.select("pre").remove(); 
-        return Jsoup.parse(doc.toString()).text().toLowerCase(); 
+        return getText(Jsoup.parse(doc.toString()).text()); 
+    }
+    
+    
+    public String getText(String in){
+        return in.toLowerCase().replaceAll(",", "").replaceAll("[.!?\\-\\;\\:\\(\\)\\[\\]]", ""); 
     }
     
     /**

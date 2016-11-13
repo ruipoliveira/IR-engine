@@ -13,8 +13,6 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.csv.*;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 /**
  * Universidade de Aveiro, DETI, Recuperação de Informação 
@@ -64,15 +62,45 @@ public class DocumentProcessor {
         
         for (int i = 0; i < cr.getNrCollections(); i++) {
             CSVParser parser = new CSVParser(new FileReader(cr.getPath(i)), CSVFormat.DEFAULT.withHeader());
-            
+            System.out.println(i); 
             for (CSVRecord record : parser) {
                 if (record.isMapped("Title")){ // 'Questions.csv':
-                    System.out.println(i+"->"+record.get("Id")+"->"+cr.processorBodyAndTitle(record.get("Title")+" "+record.get("Body"))); 
-
+                    String in1 = cr.processorBodyAndTitle(record.get("Title")+" "+record.get("Body")); 
+                    //System.out.println(i+"->"+record.get("Id")+"->"+in1); 
+                    //docIdpath.add(new DocIDPath(i, record.get("Id"), cr.getPath(i))); 
+                    
+                    for (String termo : tok.tokenizeTermo(in1)){
+                        //System.out.println(termo); 
+                        if (tok.isValid(termo)){
+                            if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
+                                termo = stemmer.getStemmer(termo);
+                                //System.out.println("ID #"+i+idDoc+ " Termo: "+termo); 
+                                indexer.addTerm(Integer.parseInt(i+record.get("Id")), termo);
+                                
+                            }   
+                        }
+                    }
+                    
+                    
+                    
                 }else{ // 'Answers.csv':
-                   
-                    System.out.println(i+"->"+record.get("Id")+"->"+cr.processorBodyAndTitle(record.get("Body"))); 
-
+                    String in2 = cr.processorBodyAndTitle(record.get("Body")); 
+                    //System.out.println(i+"->"+record.get("Id")+"->"+in2); 
+                    //docIdpath.add(new DocIDPath(i, record.get("Id"), cr.getPath(i))); 
+                    
+                    for (String termo : tok.tokenizeTermo(in2)){
+                        //System.out.println(termo); 
+                        if (tok.isValid(termo)){
+                            if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
+                                termo = stemmer.getStemmer(termo);
+                                //System.out.println("ID #"+i+idDoc+ " Termo: "+termo); 
+                                indexer.addTerm(Integer.parseInt(i+record.get("Id")), termo);
+                                
+                            }   
+                        }
+                    }
+                    
+                    
                 }    
                 
             }
@@ -118,7 +146,7 @@ public class DocumentProcessor {
         //System.out.println(memory.getCurrentMemory()); 
         
         //indexer.generateFileTokenFreqDocs();
-        //indexer.generateFileTokenFreq(); 
+        indexer.generateFileTokenFreq(); 
         //System.out.println(docIdpath.toString());
         
         
