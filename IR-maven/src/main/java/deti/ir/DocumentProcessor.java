@@ -94,15 +94,11 @@ public class DocumentProcessor {
                             if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
                                 termo = stemmer.getStemmer(termo);
                                 //System.out.println("ID #"+i+idDoc+ " Termo: "+termo); 
-                                indexer.addTerm(Integer.parseInt(i+record.get("Id")), termo);
-                                
+                                indexer.addTerm(Integer.parseInt(i+record.get("Id")), termo);                                
                             }   
                         }
-                    }
-                    
-                    
-                }    
-                
+                    }                   
+                }                    
             }
             
             parser.close();
@@ -142,15 +138,11 @@ public class DocumentProcessor {
            // }
         }
 
-        
-        //System.out.println(memory.getCurrentMemory()); 
-        
         //indexer.generateFileTokenFreqDocs();
         indexer.generateFileTokenFreq(); 
+        
         //System.out.println(docIdpath.toString());
-        
-        
-
+     
     }
     /**
      * Retorna lista de 

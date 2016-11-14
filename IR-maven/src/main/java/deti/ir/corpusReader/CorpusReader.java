@@ -72,12 +72,16 @@ public class CorpusReader {
 
                     .collect(Collectors.joining("\n")
                     );
-        } catch (Exception ex) {}
-        */
+        } catch (Exception ex) {}*/
+
         return txt;
     }
     
-    
+    /**
+     * função para obter o texto de cada ficheiro
+     * @param bodytitle
+     * @return txt
+     */
     public String processorBodyAndTitle(String bodytitle){
         Document doc = Jsoup.parse(bodytitle); 
         doc.select("pre").remove(); 
