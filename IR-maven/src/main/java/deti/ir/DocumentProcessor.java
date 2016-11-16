@@ -57,89 +57,64 @@ public class DocumentProcessor {
      * @throws java.io.IOException
      */
     public void start() throws IOException{
-        String collection, idDoc; 
+        String collection; 
+        int idDoc=0; 
+        boolean newDoc = false;
         System.out.println("Document Processor started...");
-        
+        int position; 
         for (int i = 0; i < cr.getNrCollections(); i++) {
             CSVParser parser = new CSVParser(new FileReader(cr.getPath(i)), CSVFormat.DEFAULT.withHeader());
             System.out.println(i); 
+            String xpto; 
+            
             for (CSVRecord record : parser) {
-                if (record.isMapped("Title")){ // 'Questions.csv':
-                    String in1 = cr.processorBodyAndTitle(record.get("Title")+" "+record.get("Body")); 
+                    position=0;
+                    try{
+                        xpto = record.get("Title"); 
+                    }catch(IllegalArgumentException ex){ xpto = ""; }
+                    
+                    String in1 = cr.processorBodyAndTitle(xpto+" "+record.get("Body")); 
                     //System.out.println(i+"->"+record.get("Id")+"->"+in1); 
                     //docIdpath.add(new DocIDPath(i, record.get("Id"), cr.getPath(i))); 
-                    
                     for (String termo : tok.tokenizeTermo(in1)){
-                        //System.out.println(termo); 
                         if (tok.isValid(termo)){
+                            newDoc = true;
                             if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
                                 termo = stemmer.getStemmer(termo);
-                                //System.out.println("ID #"+i+idDoc+ " Termo: "+termo); 
-                                indexer.addTerm(Integer.parseInt(i+record.get("Id")), termo);
-                                
+                                //System.out.println("ID #"+i+ " Termo: "+termo); 
+                                indexer.addTerm(termo, idDoc,position++);
                             }   
                         }
                     }
                     
                     
+                    if (memory.getCurrentMemory() >= (180*0.85)) {
+                        System.out.println(idDoc);
+                        System.out.println("Memory usage is high! Saving Indexer current state...");
+                        indexer.freeRefMaps();
+                        System.gc();
+                        System.out.println("Processing...");
+                    }    
+                    if (newDoc) {
+                        //System.out.println("idDoc->"+idDoc); 
+                        indexer.computeTF(idDoc); 
+                        idDoc++;
+                        newDoc = false;
+                    }
+                }    
                     
-                }else{ // 'Answers.csv':
-                    String in2 = cr.processorBodyAndTitle(record.get("Body")); 
-                    //System.out.println(i+"->"+record.get("Id")+"->"+in2); 
-                    //docIdpath.add(new DocIDPath(i, record.get("Id"), cr.getPath(i))); 
-                    
-                    for (String termo : tok.tokenizeTermo(in2)){
-                        //System.out.println(termo); 
-                        if (tok.isValid(termo)){
-                            if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
-                                termo = stemmer.getStemmer(termo);
-                                //System.out.println("ID #"+i+idDoc+ " Termo: "+termo); 
-                                indexer.addTerm(Integer.parseInt(i+record.get("Id")), termo);                                
-                            }   
-                        }
-                    }                   
-                }                    
-            }
-            
             parser.close();
             
             
-
-            
-            
-            
-            //for(String doc : tok.tokenizeDoc(collection)){
-              //  System.out.println(doc);
-                
-                /*
-                int pos = doc.indexOf(" ");
-                if (pos != -1){
-                    idDoc = doc.substring(0, pos); 
-                    //System.out.println("ID:"+doc.substring(0, pos)); 
-                    doc = doc.substring(pos+1, doc.length()); // restante documento
-                    //System.out.println(doc);
-                    
-                    //System.out.println(idDoc +"dds"+cr.getPath(i)); 
-                    docIdpath.add(new DocIDPath(i, idDoc, cr.getPath(i))); 
-
-                    // coloca apenas os termos do resto do documento e percorre-os todos
-                    for (String termo : tok.tokenizeTermo(doc)){
-                        if (tok.isValid(termo)){
-                            if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
-                                termo = stemmer.getStemmer(termo);
-                                //System.out.println("ID #"+i+idDoc+ " Termo: "+termo); 
-                                indexer.addTerm(Integer.parseInt(i+idDoc), termo);
-                                
-                            }   
-                        }
-                    }
-                }
-                */
-           // }
+         
         }
 
+        indexer.freeRefMaps();
+        System.gc();
+        indexer.joinRefMaps();
+        
         //indexer.generateFileTokenFreqDocs();
-        indexer.generateFileTokenFreq(); 
+        //indexer.generateFileTokenFreq(); 
         
         //System.out.println(docIdpath.toString());
      

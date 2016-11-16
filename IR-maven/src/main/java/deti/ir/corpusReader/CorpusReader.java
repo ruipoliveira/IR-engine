@@ -88,6 +88,13 @@ public class CorpusReader {
         return getText(Jsoup.parse(doc.toString()).text()); 
     }
     
+    public String cenas(String xto){
+        try {
+        return xto; 
+        }catch (Exception e){
+            return ""; 
+        }
+    }
     
     public String getText(String in){
         return in.toLowerCase().replaceAll(",", "").replaceAll("[.!?\\-\\;\\:\\(\\)\\[\\]]", ""); 
