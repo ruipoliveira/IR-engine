@@ -79,7 +79,7 @@ public class DocumentProcessor {
                     }catch(IllegalArgumentException ex){ xpto = ""; }
                     
                     String in1 = cr.processorBodyAndTitle(xpto+" "+record.get("Body")); 
-                    //System.out.println(i+"->"+record.get("Id")+"->"+in1); 
+                    System.out.println(i+""+idDoc+"->"+in1); 
                     //docIdpath.add(new DocIDPath(i, record.get("Id"), cr.getPath(i))); 
                     for (String termo : tok.tokenizeTermo(in1)){
                         if (tok.isValid(termo)){
@@ -100,7 +100,7 @@ public class DocumentProcessor {
                         }
                     }
                     
-            System.out.println("CRLHHHHHHH!"+i); 
+           // System.out.println("CRLHHHHHHH!"+i); 
             if (newDoc) {
                 //System.out.println("idDoc->"+idDoc); 
                 indexer.computeTF(Integer.parseInt(i+""+idDoc)); 

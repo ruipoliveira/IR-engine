@@ -50,14 +50,19 @@ public class CorpusReader {
     
     
     public String getText(String in){
-        return in.toLowerCase().replaceAll(",", "").replaceAll("[.!?\\-\\;\\:\\(\\)\\[\\]]", ""); 
+        return in.toLowerCase()
+                .replaceAll("((https?|ftp|gopher|telnet|file|Unsure|http):((//)|(\\\\\\\\))+[\\\\w\\\\d:#@%/;$()~_?\\\\+-=\\\\\\\\\\\\.&]*)", " ") 
+                .replaceAll(",", " ")
+                .replaceAll("[.!?\\-\\;\\:\\(\\)\\[\\]\\<\\>\\+\\\"\\'\\|\\%\\@\\_\\=]", " ")
+                .replaceAll("/", " ")
+                .replaceAll("\\\\", " "); 
     }
     
-    /**
-     * retorna o caminho para cada ficheiro em forma de String
-     * @param position
-     * @return files.get(position).toString(); 
-     */
+/**
+ * retorna o caminho para cada ficheiro em forma de String
+ * @param position
+ * @return files.get(position).toString(); 
+ */
     public String getPath(int position){
         return files.get(position).toString(); 
     }

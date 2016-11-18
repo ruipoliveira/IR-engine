@@ -1,7 +1,5 @@
 package deti.ir.tokenizer;
 
-import deti.ir.corpusReader.CorpusReader;
-
 /**
  * Universidade de Aveiro, DETI, Recuperação de Informação 
  * @author Gabriel Vieira, gabriel.vieira@ua.pt

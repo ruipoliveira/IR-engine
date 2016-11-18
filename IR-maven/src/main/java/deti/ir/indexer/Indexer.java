@@ -74,7 +74,7 @@ public class Indexer {
      * @param docId document identification.
      */
     public void addTerm(String term, int docId, int position) {
-        //System.out.println(docId); 
+        //System.out.println(docId);
         int mapIndex = findTermMap(term);
 
         termFreqOfDoc.merge(term, 1, (a, b) -> a + b);
@@ -90,7 +90,7 @@ public class Indexer {
         tmp = termFreqOfDoc.entrySet().stream()
                 .collect(Collectors.toMap(e -> e.getKey(), e -> computeValue(e.getValue())));
         
-        System.out.println(tmp.toString()) ;
+        //System.out.println(tmp.toString()) ;
         
         termFreqOfDoc = new HashMap<>();
         HashMap<String, String> tmp2 = new HashMap<>(tmp);
@@ -98,7 +98,7 @@ public class Indexer {
         //System.out.println(tmp2.toString()) ;
          
         tmp2.entrySet().forEach((entry) -> {
-            System.out.println( "getValue: "+rootVal); 
+            //System.out.println( "getValue: "+rootVal); 
             termReferences[findTermMap(entry.getKey())].compute(entry.getKey(), (k, v) -> v == null ? getNewHM(docId, entry.getValue(), termPosOfDoc.get(entry.getKey())) : updateHM(docId, entry.getValue(), v, termPosOfDoc.get(entry.getKey())));
         });
         rootVal = 0;
@@ -114,8 +114,8 @@ public class Indexer {
         
         double val = 1 + Math.log10(value);
         rootVal += Math.pow(val, 2);
-        System.out.println("val:"+val+" root:"+rootVal); 
-        return df.format(val);
+        //System.out.println("val:"+val+" root:"+rootVal); 
+        return val+"";
     }
 
     /**
