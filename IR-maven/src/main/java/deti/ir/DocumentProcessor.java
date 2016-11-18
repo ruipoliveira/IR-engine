@@ -79,7 +79,7 @@ public class DocumentProcessor {
                     }catch(IllegalArgumentException ex){ xpto = ""; }
                     
                     String in1 = cr.processorBodyAndTitle(xpto+" "+record.get("Body")); 
-                    System.out.println(i+""+idDoc+"->"+in1); 
+                    //System.out.println(i+""+idDoc+"->"+in1); 
                     //docIdpath.add(new DocIDPath(i, record.get("Id"), cr.getPath(i))); 
                     for (String termo : tok.tokenizeTermo(in1)){
                         if (tok.isValid(termo)){
@@ -91,7 +91,7 @@ public class DocumentProcessor {
                             }   
                         }
                         
-                        if (memory.getCurrentMemory() >= (128*0.85)) {
+                        if (memory.getCurrentMemory() >= (512*0.85)) {
                             System.out.println(idDoc);
                             System.out.println("Memory usage is high! Saving Indexer current state...");
                             indexer.freeRefMaps();

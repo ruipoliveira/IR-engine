@@ -13,14 +13,16 @@ public class RIproject {
    
     public static void main(String[]args) throws FileNotFoundException, IOException, Exception{
        
-       String pathDir = "/files-data/stacksample/"; 
+       String pathDir = "/files-data/stacksample_orig/"; 
        String pathStop = "/files-data/stopwords_en.txt"; 
        DocumentProcessor dp = new DocumentProcessor(System.getProperty("user.dir")+pathDir, //args[0]
-       System.getProperty("user.dir")+pathStop); //args[1] 
-       dp.start();
+       System.getProperty("user.dir")+pathStop //args[1] 
+     
+       ); 
        
-       //SearcherProcessor sp = new SearcherProcessor(System.getProperty("user.dir")+pathStop);
-       //sp.start();
+       dp.start();
+
+       
 
     }
     

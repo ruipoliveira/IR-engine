@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import static deti.ir.indexer.Utils.findTermMap;
+import java.util.regex.Pattern;
+
+import static deti.ir.indexer.Utils.findTermMap;  
 
 /**
  * Indexer component of the Pipeline Processor.
@@ -39,7 +40,7 @@ public class Indexer {
     /**
      * Value of the current value of the root for normalization.
      */
-    private double rootVal;
+    private double sumTF;
 
     /**
      * Term frequency in the current document.
@@ -55,7 +56,7 @@ public class Indexer {
      * Indexer constructor that creates an Inverted Index.
      */
     public Indexer() {
-        rootVal = 0;
+        sumTF = 0;
         df = new DecimalFormat("#,00000");
         //We split the indexers in five, 4 for groups of the alphabet and 1 for numbers
         termReferences = new TermPosting[5];
@@ -101,7 +102,8 @@ public class Indexer {
             //System.out.println( "getValue: "+rootVal); 
             termReferences[findTermMap(entry.getKey())].compute(entry.getKey(), (k, v) -> v == null ? getNewHM(docId, entry.getValue(), termPosOfDoc.get(entry.getKey())) : updateHM(docId, entry.getValue(), v, termPosOfDoc.get(entry.getKey())));
         });
-        rootVal = 0;
+        
+        sumTF = 0;
         termPosOfDoc = new HashMap<>();
     }
 
@@ -112,10 +114,10 @@ public class Indexer {
      */
     private String computeValue(double value) {
         
-        double val = 1 + Math.log10(value);
-        rootVal += Math.pow(val, 2);
+        double tf = 1 + Math.log10(value);
+        sumTF += Math.pow(tf, 2);
         //System.out.println("val:"+val+" root:"+rootVal); 
-        return val+"";
+        return tf+"";
     }
 
     /**
@@ -148,7 +150,7 @@ public class Indexer {
     private String normalization(double value) {
         //System.out.println(value); 
         //System.out.println("fct"+df.format(value / Math.sqrt(rootVal))); 
-        return  ""+value/Math.sqrt(rootVal);
+        return  ""+value/Math.sqrt(sumTF);
     }
 
     /**
@@ -192,5 +194,8 @@ public class Indexer {
             tr.storeFinalMap(letter);
         }
     }
+    
+   
+        
 
 }

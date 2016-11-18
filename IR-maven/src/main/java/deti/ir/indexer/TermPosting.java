@@ -145,8 +145,6 @@ public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
 
     }
 
-
-    
     public int getSubId() {
         return subId;
     }
