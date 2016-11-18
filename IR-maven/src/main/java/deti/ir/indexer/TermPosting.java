@@ -30,7 +30,7 @@ public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
         String[] groups = getCharGroup(id);
 
         for (String group : groups) {
-            File file = new File("termRef_" + group.charAt(1) + "_" + id + subID);
+            File file = new File("outputs/termRef_" + group.charAt(1) + "_" + id + subID+".txt");
             try (BufferedWriter writer = Files.newBufferedWriter(file.toPath())) {
                 this.entrySet()
                         .stream()
@@ -60,7 +60,7 @@ public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
 
     public void storeFinalMap(String firstLetter) {
         
-        File file = new File("termRef_" + firstLetter);
+        File file = new File("outputs/termRef_" + firstLetter+".txt");
         
         final String letter;
         if(firstLetter.equals("\\"))
@@ -122,7 +122,6 @@ public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
 
     
     public void loadTermRefMap(String firstLetter, int i) {
-        
         loadTermRefMapAux(firstLetter + "_" + id + i);
     }
 

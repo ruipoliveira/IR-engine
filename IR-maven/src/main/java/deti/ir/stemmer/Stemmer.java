@@ -14,12 +14,21 @@ public class Stemmer {
      */
     private final String algorithm;
     
+    private SnowballStemmer stemmer; 
+    
     /**
      * Construtor do Stemmer que recebe o algoritmo a ser usado para o stemming dos termos
      * @param algorithm 
+     * @throws java.lang.ClassNotFoundException 
+     * @throws java.lang.InstantiationException 
+     * @throws java.lang.IllegalAccessException 
      */
-    public Stemmer(String algorithm){
-        this.algorithm = algorithm;  
+    public Stemmer(String algorithm) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
+        this.algorithm = algorithm; 
+        Class stemClass;
+        stemClass = Class.forName("deti.ir.stemmer." + algorithm);
+        stemmer = (SnowballStemmer) stemClass.newInstance();
+            
     }
     
     /**
@@ -28,16 +37,11 @@ public class Stemmer {
      * @return token
      */
     public String getStemmer(String token){
-        Class stemClass;
-        try {
-            stemClass = Class.forName("deti.ir.stemmer." + algorithm);
-            SnowballStemmer stemmer = (SnowballStemmer) stemClass.newInstance();
-            stemmer.setCurrent(token);
-            if (stemmer.stem()){
-                return stemmer.getCurrent();
-            }
+        stemmer.setCurrent(token);
+        if (stemmer.stem()){
+            return stemmer.getCurrent();
+        }
                 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {}
         return token;
     }
     

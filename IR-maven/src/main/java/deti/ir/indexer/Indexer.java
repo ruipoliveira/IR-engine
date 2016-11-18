@@ -74,6 +74,7 @@ public class Indexer {
      * @param docId document identification.
      */
     public void addTerm(String term, int docId, int position) {
+        //System.out.println(docId); 
         int mapIndex = findTermMap(term);
 
         termFreqOfDoc.merge(term, 1, (a, b) -> a + b);
@@ -89,13 +90,15 @@ public class Indexer {
         tmp = termFreqOfDoc.entrySet().stream()
                 .collect(Collectors.toMap(e -> e.getKey(), e -> computeValue(e.getValue())));
         
-        //System.out.println(tmp.toString()) ;
+        System.out.println(tmp.toString()) ;
         
         termFreqOfDoc = new HashMap<>();
         HashMap<String, String> tmp2 = new HashMap<>(tmp);
         
+        //System.out.println(tmp2.toString()) ;
+         
         tmp2.entrySet().forEach((entry) -> {
-            //System.out.println( "getValue: "+entry.getValue()); 
+            System.out.println( "getValue: "+rootVal); 
             termReferences[findTermMap(entry.getKey())].compute(entry.getKey(), (k, v) -> v == null ? getNewHM(docId, entry.getValue(), termPosOfDoc.get(entry.getKey())) : updateHM(docId, entry.getValue(), v, termPosOfDoc.get(entry.getKey())));
         });
         rootVal = 0;
@@ -108,8 +111,10 @@ public class Indexer {
      * @return updated value.
      */
     private String computeValue(double value) {
+        
         double val = 1 + Math.log10(value);
         rootVal += Math.pow(val, 2);
+        System.out.println("val:"+val+" root:"+rootVal); 
         return df.format(val);
     }
 
@@ -130,6 +135,7 @@ public class Indexer {
      * @param hm hashmap with update
      */
     private HashMap<Integer, String> updateHM(int docId, String value, HashMap<Integer, String> hm, String pos) {
+        //System.out.println("VALUE "+value); 
         hm.put(docId, normalization(Double.valueOf(value)) + "_" + pos);
         return hm;
     }
@@ -140,8 +146,9 @@ public class Indexer {
      * @return normalization result.
      */
     private String normalization(double value) {
-        
-        return df.format(value / Math.sqrt(rootVal));
+        //System.out.println(value); 
+        //System.out.println("fct"+df.format(value / Math.sqrt(rootVal))); 
+        return  ""+value/Math.sqrt(rootVal);
     }
 
     /**

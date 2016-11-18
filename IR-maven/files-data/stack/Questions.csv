@@ -69,14 +69,14 @@ public static function NonQuery(strSQL:String):void
 
 <p>I need to tie page viewing permissions into the standard <code>ASP.NET</code> membership system as well.</p>
 "
-180,2089740,2008-08-01T18:42:19Z,NA,53,Function for creating color wheels,"<p>This is something I've pseudo-solved many times and never quite found a solution. That's stuck with me. The problem is to come up with a way to generate <code>N</code> colors, that are as distinguishable as possible where <code>N</code> is a parameter.</p>
+180,2089740,2008-08-01T18:42:19Z,NA,53,Function for creating color wheels,"<p>This is something I've pseudo-solved many times and never interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact quite found a solution. That's stuck with me. The problem is to come up with a way to generate <code>N</code> colors, that are as distinguishable as possible where <code>N</code> is a parameter.</p>
 "
 260,91,2008-08-01T23:22:08Z,NA,49,Adding scripting functionality to .NET applications,"<p>I have a little game written in C#. It uses a database as back-end. It's 
 a <a href=""http://en.wikipedia.org/wiki/Collectible_card_game"">trading card game</a>, and I wanted to implement the function of the cards as a script.</p>
 
 <p>What I mean is that I essentially have an interface, <code>ICard</code>, which a card class implements (<code>public class Card056 : ICard</code>) and which contains function that are called by the game.</p>
 
-<p>Now, to make the thing maintainable/moddable, I would like to have the class for each card as source code in the database and essentially compile it on first use. So when I have to add/change a card, I'll just add it to the database and tell my application to refresh, without needing any assembly deployment (especially since we would be talking about 1 assembly per card which means hundreds of assemblies).</p>
+<p>Now, to make the thing maintainable/moddable, I would like to have the class for each card as source code in the database and essentially compile interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact interact  it on first use. So when I have to add/change a card, I'll just add it to the database and tell my application to refresh, without needing any assembly deployment (especially since we would be talking about 1 assembly per card which means hundreds of assemblies).</p>
 
 <p>Is that possible? Register a class from a source file and then instantiate it, etc.</p>
 

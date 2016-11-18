@@ -41,8 +41,11 @@ public class DocumentProcessor {
      * Construtor para o fluxo de processamento
      * @param directory
      * @param stopWords_dir 
+     * @throws java.lang.ClassNotFoundException 
+     * @throws java.lang.IllegalAccessException 
+     * @throws java.lang.InstantiationException 
      */
-    public DocumentProcessor(String directory, String stopWords_dir) {
+    public DocumentProcessor(String directory, String stopWords_dir) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         //System.out.println(Paths.get(directory).toString()); 
         cr = new CorpusReader(Paths.get(directory));
         tok = new Tokenizer(); 
@@ -57,15 +60,17 @@ public class DocumentProcessor {
      * @throws java.io.IOException
      */
     public void start() throws IOException{
+        
         String collection; 
-        int idDoc=0; 
+        
         boolean newDoc = false;
         System.out.println("Document Processor started...");
         int position; 
-        for (int i = 0; i < cr.getNrCollections(); i++) {
-            CSVParser parser = new CSVParser(new FileReader(cr.getPath(i)), CSVFormat.DEFAULT.withHeader());
+        for (int i = 1; i <= cr.getNrCollections(); i++) {
+            CSVParser parser = new CSVParser(new FileReader(cr.getPath(i-1)), CSVFormat.DEFAULT.withHeader());
             System.out.println(i); 
             String xpto; 
+            int idDoc=0;
             
             for (CSVRecord record : parser) {
                     position=0;
@@ -81,34 +86,32 @@ public class DocumentProcessor {
                             newDoc = true;
                             if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
                                 termo = stemmer.getStemmer(termo);
-                                //System.out.println("ID #"+i+ " Termo: "+termo); 
-                                indexer.addTerm(termo, idDoc,position++);
+                                //System.out.println("ID #"+i+""+idDoc+ " Termo: "+termo); 
+                                indexer.addTerm(termo, Integer.parseInt(i+""+idDoc),position++);
                             }   
+                        }
+                        
+                        if (memory.getCurrentMemory() >= (128*0.85)) {
+                            System.out.println(idDoc);
+                            System.out.println("Memory usage is high! Saving Indexer current state...");
+                            indexer.freeRefMaps();
+                            System.gc();
+                            System.out.println("Processing...");
                         }
                     }
                     
-                    
-                    if (memory.getCurrentMemory() >= (180*0.85)) {
-                        System.out.println(idDoc);
-                        System.out.println("Memory usage is high! Saving Indexer current state...");
-                        indexer.freeRefMaps();
-                        System.gc();
-                        System.out.println("Processing...");
-                    }    
-                    if (newDoc) {
-                        //System.out.println("idDoc->"+idDoc); 
-                        indexer.computeTF(idDoc); 
-                        idDoc++;
-                        newDoc = false;
-                    }
-                }    
-                    
-            parser.close();
+            System.out.println("CRLHHHHHHH!"+i); 
+            if (newDoc) {
+                //System.out.println("idDoc->"+idDoc); 
+                indexer.computeTF(Integer.parseInt(i+""+idDoc)); 
+                idDoc++;
+                newDoc = false;
+            }   
+                }  
             
+         parser.close();
             
-         
         }
-
         indexer.freeRefMaps();
         System.gc();
         indexer.joinRefMaps();

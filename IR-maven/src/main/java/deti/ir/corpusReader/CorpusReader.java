@@ -20,6 +20,7 @@ import org.jsoup.nodes.Document;
 public class CorpusReader {
     
     List<Path> files;
+    Document doc = null; 
 
     /**
      * Constructor do CorpusReader que recebe o caminho onde os ficheiros a serem lidos se situa
@@ -35,66 +36,18 @@ public class CorpusReader {
         System.out.println(files); 
     }
     
-    /**
-     * função para obter o texto de cada ficheiro
-     * @param position
-     * @return txt
-     */
-    public String getText(int position) throws IOException{
-        String txt = "";
-        System.out.println(position+"-->"+files.get(position)); 
-       
-        
-        CSVParser parser = new CSVParser(new FileReader(files.get(position).toString()), CSVFormat.DEFAULT.withHeader());
-        
-        System.out.print(parser);
-        for (CSVRecord record : parser) {
-        //System.out.println(record.get("Id")+"->"+record.get("Body"));
-        }
-        parser.close();
 
-        System.out.println("LEU tudo!"); 
-
-        /*
-        try (Stream<String> stream = Files.lines(files.get(position))){
-            txt = stream.parallel()
-                    .filter(line -> line.length() > 0 )
-                    .map(line -> { System.out.println(line);  return line.toLowerCase(); }) 
-                    
-                  //  .map(line -> line.replaceAll(",", ""))
-                    .map(line -> line.replaceAll("\\<.*?>", ""))
-                    .map(line -> line.replaceAll("\\<.*?>", ""))
-                    .map(line -> line.replaceAll(",m[0-9]", ""))
-                    .map(line -> line.replaceAll("\"", ""))
-                    .map(line -> line.replaceAll(",", " "))
-                    .map(line -> line.replaceAll("[.!?\\-\\;\\:\\(\\)\\[\\]]", ""))
-                    
-
-                    .collect(Collectors.joining("\n")
-                    );
-        } catch (Exception ex) {}*/
-
-        return txt;
-    }
-    
     /**
      * função para obter o texto de cada ficheiro
      * @param bodytitle
      * @return txt
      */
     public String processorBodyAndTitle(String bodytitle){
-        Document doc = Jsoup.parse(bodytitle); 
+        doc = Jsoup.parse(bodytitle); 
         doc.select("pre").remove(); 
         return getText(Jsoup.parse(doc.toString()).text()); 
     }
     
-    public String cenas(String xto){
-        try {
-        return xto; 
-        }catch (Exception e){
-            return ""; 
-        }
-    }
     
     public String getText(String in){
         return in.toLowerCase().replaceAll(",", "").replaceAll("[.!?\\-\\;\\:\\(\\)\\[\\]]", ""); 
