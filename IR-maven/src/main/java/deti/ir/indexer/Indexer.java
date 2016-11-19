@@ -7,9 +7,8 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.regex.Pattern;
 
-import static deti.ir.indexer.Utils.findTermMap;  
+import java.util.regex.Pattern;
 
 /**
  * Indexer component of the Pipeline Processor.
@@ -40,7 +39,7 @@ public class Indexer {
     /**
      * Value of the current value of the root for normalization.
      */
-    private double sumTF;
+    private double sumxi;
 
     /**
      * Term frequency in the current document.
@@ -56,7 +55,7 @@ public class Indexer {
      * Indexer constructor that creates an Inverted Index.
      */
     public Indexer() {
-        sumTF = 0;
+        sumxi = 0;
         df = new DecimalFormat("#,00000");
         //We split the indexers in five, 4 for groups of the alphabet and 1 for numbers
         termReferences = new TermPosting[5];
@@ -86,10 +85,10 @@ public class Indexer {
      * Compute TF of the values of the current document.
      * @param docId document identification.
      */
-    public void computeTF(int docId) {
+    public void calculateTF(int docId) {
         Map<String, String> tmp;
         tmp = termFreqOfDoc.entrySet().stream()
-                .collect(Collectors.toMap(e -> e.getKey(), e -> computeValue(e.getValue())));
+                .collect(Collectors.toMap(e -> e.getKey(), e -> String.valueOf(computeValue(e.getValue()))));
         
         //System.out.println(tmp.toString()) ;
         
@@ -103,7 +102,7 @@ public class Indexer {
             termReferences[findTermMap(entry.getKey())].compute(entry.getKey(), (k, v) -> v == null ? getNewHM(docId, entry.getValue(), termPosOfDoc.get(entry.getKey())) : updateHM(docId, entry.getValue(), v, termPosOfDoc.get(entry.getKey())));
         });
         
-        sumTF = 0;
+        sumxi = 0;
         termPosOfDoc = new HashMap<>();
     }
 
@@ -112,12 +111,12 @@ public class Indexer {
      * @param value new value found.
      * @return updated value.
      */
-    private String computeValue(double value) {
+    private double computeValue(double value) {
         
         double tf = 1 + Math.log10(value);
-        sumTF += Math.pow(tf, 2);
+        sumxi += Math.pow(tf, 2);
         //System.out.println("val:"+val+" root:"+rootVal); 
-        return tf+"";
+        return tf;
     }
 
     /**
@@ -127,7 +126,7 @@ public class Indexer {
     private HashMap<Integer, String> getNewHM(int docId, String value, String pos) {
         //System.out.println("------------------>"+value); 
         HashMap<Integer, String> map = new HashMap<>();
-        map.put(docId, normalization(Double.valueOf(value)) + "_" + pos);
+        map.put(docId, tfNormalization(Double.valueOf(value)) + "_" + pos);
         return map;
     }
 
@@ -138,7 +137,7 @@ public class Indexer {
      */
     private HashMap<Integer, String> updateHM(int docId, String value, HashMap<Integer, String> hm, String pos) {
         //System.out.println("VALUE "+value); 
-        hm.put(docId, normalization(Double.valueOf(value)) + "_" + pos);
+        hm.put(docId, tfNormalization(Double.valueOf(value)) + "_" + pos);
         return hm;
     }
 
@@ -147,10 +146,10 @@ public class Indexer {
      * @param value value computed.
      * @return normalization result.
      */
-    private String normalization(double value) {
+    private double tfNormalization(double value) {
         //System.out.println(value); 
         //System.out.println("fct"+df.format(value / Math.sqrt(rootVal))); 
-        return  ""+value/Math.sqrt(sumTF);
+        return  value/Math.sqrt(sumxi);
     }
 
     /**
@@ -196,6 +195,20 @@ public class Indexer {
     }
     
    
+    private int findTermMap(String term) {
+
+        if (Pattern.compile("^[a-d]\\w*").matcher(term).matches()) {
+            return 0;
+        } else if (Pattern.compile("[e-l]\\w*").matcher(term).matches()) {
+            return 1;
+        } else if (Pattern.compile("^[m-r]\\w*").matcher(term).matches()) {
+            return 2;
+        } else if (Pattern.compile("^[s-z]\\w*").matcher(term).matches()) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
         
 
 }

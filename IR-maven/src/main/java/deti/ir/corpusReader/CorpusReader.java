@@ -1,13 +1,11 @@
 package deti.ir.corpusReader;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.csv.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -42,7 +40,7 @@ public class CorpusReader {
      * @param bodytitle
      * @return txt
      */
-    public String processorBodyAndTitle(String bodytitle){
+    public String filterBodyAndTitle(String bodytitle){
         doc = Jsoup.parse(bodytitle); 
         doc.select("pre").remove(); 
         return getText(Jsoup.parse(doc.toString()).text()); 
@@ -58,11 +56,11 @@ public class CorpusReader {
                 .replaceAll("\\\\", " "); 
     }
     
-/**
- * retorna o caminho para cada ficheiro em forma de String
- * @param position
- * @return files.get(position).toString(); 
- */
+    /**
+     * retorna o caminho para cada ficheiro em forma de String
+     * @param position
+     * @return files.get(position).toString(); 
+     */
     public String getPath(int position){
         return files.get(position).toString(); 
     }

@@ -1,7 +1,6 @@
 package deti.ir;
 
 import deti.ir.corpusReader.CorpusReader;
-import deti.ir.indexer.DocIDPath;
 import deti.ir.indexer.Indexer;
 import deti.ir.memory.MemoryManagement;
 import deti.ir.stemmer.Stemmer;
@@ -10,8 +9,6 @@ import deti.ir.tokenizer.Tokenizer;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
 import org.apache.commons.csv.*;
 
 /**
@@ -30,22 +27,20 @@ public class DocumentProcessor {
     private StopWords sw;
     
     private final Stemmer stemmer;
-    
-    List<DocIDPath> docIdpath; 
-    
+        
     private final MemoryManagement memory;
-       
-    private String directory; 
-    private int id; 
+    
+    private final int maxMem; 
     /**
      * Construtor para o fluxo de processamento
      * @param directory
      * @param stopWords_dir 
+     * @param maxMem 
      * @throws java.lang.ClassNotFoundException 
      * @throws java.lang.IllegalAccessException 
      * @throws java.lang.InstantiationException 
      */
-    public DocumentProcessor(String directory, String stopWords_dir) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public DocumentProcessor(String directory, String stopWords_dir, int maxMem) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         //System.out.println(Paths.get(directory).toString()); 
         cr = new CorpusReader(Paths.get(directory));
         tok = new Tokenizer(); 
@@ -53,7 +48,7 @@ public class DocumentProcessor {
         sw = new StopWords(Paths.get(stopWords_dir));
         stemmer = new Stemmer("englishStemmer");
         memory = new MemoryManagement(); 
-        docIdpath = new LinkedList<>(); 
+        this.maxMem = maxMem; 
     }
     /**
      * Método que inicia processamento
@@ -61,72 +56,55 @@ public class DocumentProcessor {
      */
     public void start() throws IOException{
         
-        String collection; 
-        
-        boolean newDoc = false;
-        System.out.println("Document Processor started...");
-        int position; 
+        int pos; 
         for (int i = 1; i <= cr.getNrCollections(); i++) {
             CSVParser parser = new CSVParser(new FileReader(cr.getPath(i-1)), CSVFormat.DEFAULT.withHeader());
-            System.out.println(i); 
-            String xpto; 
+            System.out.println("Está a processar..."+cr.getPath(i-1)); 
+            String title; 
             int idDoc=0;
             
             for (CSVRecord record : parser) {
-                    position=0;
-                    try{
-                        xpto = record.get("Title"); 
-                    }catch(IllegalArgumentException ex){ xpto = ""; }
-                    
-                    String in1 = cr.processorBodyAndTitle(xpto+" "+record.get("Body")); 
-                    //System.out.println(i+""+idDoc+"->"+in1); 
-                    //docIdpath.add(new DocIDPath(i, record.get("Id"), cr.getPath(i))); 
-                    for (String termo : tok.tokenizeTermo(in1)){
-                        if (tok.isValid(termo)){
-                            newDoc = true;
-                            if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
-                                termo = stemmer.getStemmer(termo);
-                                //System.out.println("ID #"+i+""+idDoc+ " Termo: "+termo); 
-                                indexer.addTerm(termo, Integer.parseInt(i+""+idDoc),position++);
-                            }   
-                        }
-                        
-                        if (memory.getCurrentMemory() >= (512*0.85)) {
-                            System.out.println(idDoc);
-                            System.out.println("Memory usage is high! Saving Indexer current state...");
-                            indexer.freeRefMaps();
-                            System.gc();
-                            System.out.println("Processing...");
-                        }
+                pos=0;
+                try{
+                    title = record.get("Title"); 
+                }catch(IllegalArgumentException ex){
+                    title = ""; 
+                }
+                String in1 = cr.filterBodyAndTitle(title+" "+record.get("Body")); 
+                //System.out.println(i+""+idDoc+"->"+in1); 
+                for (String termo : tok.tokenizeTermo(in1)){
+                    if (tok.isValid(termo)){
+                        if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
+                            termo = stemmer.getStemmer(termo);
+                            //System.out.println("ID #"+i+""+idDoc+ " Termo: "+termo); 
+                            indexer.addTerm(termo, Integer.parseInt(i+""+idDoc),pos++);
+                        }   
                     }
-                    
-           // System.out.println("CRLHHHHHHH!"+i); 
-            if (newDoc) {
-                //System.out.println("idDoc->"+idDoc); 
-                indexer.computeTF(Integer.parseInt(i+""+idDoc)); 
+
+                    if (memory.getCurrentMemory() >= (maxMem*0.85)) {
+                        System.out.println("\nDocId #"+i+idDoc+"\nNovo ficheiro escrito em disco...");
+                        indexer.freeRefMaps();
+                        System.gc();
+                    }
+                }
+                indexer.calculateTF(Integer.parseInt(i+""+idDoc)); 
                 idDoc++;
-                newDoc = false;
-            }   
-                }  
+            }  
             
-         parser.close();
+        parser.close();
             
         }
+        
         indexer.freeRefMaps();
         System.gc();
         indexer.joinRefMaps();
         
+        System.out.println("Fim do processo de indexação e escrita em disco."); 
         //indexer.generateFileTokenFreqDocs();
         //indexer.generateFileTokenFreq(); 
         
         //System.out.println(docIdpath.toString());
      
     }
-    /**
-     * Retorna lista de 
-     * @return List<DocIDPath>
-     */
-    public List<DocIDPath> getListPath(){
-        return docIdpath;
-    }
+    
 }
