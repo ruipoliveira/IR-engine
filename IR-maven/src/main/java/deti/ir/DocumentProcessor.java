@@ -97,14 +97,15 @@ public class DocumentProcessor {
         
         indexer.freeRefMaps();
         System.gc();
+        System.out.println("\nJuntar todos os ficheiros resultantes da indexação..."); 
         indexer.joinRefMaps();
         
-        System.out.println("Fim do processo de indexação e escrita em disco."); 
+        System.out.println("\nFim do processo de indexação e escrita em disco."); 
         //indexer.generateFileTokenFreqDocs();
         //indexer.generateFileTokenFreq(); 
         
         //System.out.println(docIdpath.toString());
      
-    }
+    }   
     
 }

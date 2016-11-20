@@ -15,11 +15,11 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
-public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
+public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
 
     private int id, subId;
 
-    public TermPosting(int id, int subID) {
+    public TokenPost(int id, int subID) {
         super();
         this.id = id;
         subId = subID;
@@ -30,7 +30,7 @@ public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
         String[] groups = getCharGroup(id);
 
         for (String group : groups) {
-            File file = new File("outputs/termRef_" + group.charAt(1) + "_" + id + subID+".txt");
+            File file = new File("outputs/termRef_" + group.charAt(1) + "_" + id + subID);
             try (BufferedWriter writer = Files.newBufferedWriter(file.toPath())) {
                 this.entrySet()
                         .stream()
@@ -44,24 +44,24 @@ public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
                                             .map(Object::toString)
                                             .collect(Collectors.joining(", ")) + "\n");
                                 } catch (IOException ex) {
-                                    Logger.getLogger(TermPosting.class.getName()).log(Level.SEVERE, null, ex);
+                                    Logger.getLogger(TokenPost.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
                         });
 
                 writer.close();
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(TermPosting.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TokenPost.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(TermPosting.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TokenPost.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     public void storeFinalMap(String firstLetter) {
-        
-        File file = new File("outputs/termRef_" + firstLetter+".txt");
-        
+       
+        File file = new File("outputs/termRef_" + firstLetter);
+                
         final String letter;
         if(firstLetter.equals("\\"))
             letter = firstLetter.concat("d+");
@@ -81,23 +81,23 @@ public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
                                         .map(Object::toString)
                                         .collect(Collectors.joining(", ")) + "\n");
                             } catch (IOException ex) {
-                                Logger.getLogger(TermPosting.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(TokenPost.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     });
 
             writer.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(TermPosting.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TokenPost.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(TermPosting.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TokenPost.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
     public void loadTermRefMapAux(String fileLetter) {
         HashMap<Integer, String> hm;
-        Path file = Paths.get("termRef_" + fileLetter);
+        Path file = Paths.get("outputs/termRef_" + fileLetter);
         try (BufferedReader reader = Files.newBufferedReader(file)) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -126,7 +126,7 @@ public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
     }
 
     
-    public void mergeRefMap(TermPosting trm) {
+    public void mergeRefMap(TokenPost trm) {
         //For each key in termRefMap 
         for (String s : trm.keySet()) {
             HashMap<Integer, String> temp = this.get(s);
@@ -177,5 +177,6 @@ public class TermPosting extends HashMap<String, HashMap<Integer, String>> {
             }
         }
     }
+    
 
 }
