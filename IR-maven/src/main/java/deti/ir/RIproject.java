@@ -1,5 +1,6 @@
 package deti.ir;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -13,14 +14,16 @@ public class RIproject {
    
     public static void main(String[]args) throws FileNotFoundException, IOException, Exception{
        
-       String pathDir = "/files-data/stacksample/"; 
-       String pathStop = "/files-data/stopwords_en.txt"; 
-       DocumentProcessor dp = new DocumentProcessor(System.getProperty("user.dir")+pathDir, //args[0]
-            System.getProperty("user.dir")+pathStop, //args[1]
-            512 //args[2]
-       ); 
-       
-       dp.start();
+    File fdir = new File(args[0]);
+    File fstp = new File(args[1]);
+    int memory = Integer.parseInt(args[2]); 
+
+    if (fdir.exists() && fdir.isDirectory() && fstp.exists() && (memory >= 1 && memory <= 4096)) {
+        DocumentProcessor dp = new DocumentProcessor(args[0], args[1], memory); 
+        dp.start();
+    }else{
+        System.out.println("Parametros incorretos."); 
+    }
 
     }
 }

@@ -9,7 +9,9 @@ import deti.ir.tokenizer.Tokenizer;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
-import org.apache.commons.csv.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 /**
  * Universidade de Aveiro, DETI, Recuperação de Informação 
@@ -41,7 +43,6 @@ public class DocumentProcessor {
      * @throws java.lang.InstantiationException 
      */
     public DocumentProcessor(String directory, String stopWords_dir, int maxMem) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        //System.out.println(Paths.get(directory).toString()); 
         cr = new CorpusReader(Paths.get(directory));
         tok = new Tokenizer(); 
         indexer = new Indexer();
@@ -80,15 +81,17 @@ public class DocumentProcessor {
                             indexer.addTerm(termo, Integer.parseInt(i+""+idDoc),pos++);
                         }   
                     }
-
-                    if (memory.getCurrentMemory() >= (maxMem*0.85)) {
-                        System.out.println("\nDocId #"+i+idDoc+"\nNovo ficheiro escrito em disco...");
-                        indexer.freeRefMaps();
-                        System.gc();
-                    }
                 }
+                
                 indexer.calculateTF(Integer.parseInt(i+""+idDoc)); 
                 idDoc++;
+                
+                if (memory.getCurrentMemory() >= (maxMem*0.75)) {
+                    System.out.println("\nDocId #"+i+idDoc+"\nNovo ficheiro escrito em disco...");
+                    indexer.freeRefMaps();
+                    System.gc();
+                }
+                
             }  
             
         parser.close();
@@ -96,15 +99,13 @@ public class DocumentProcessor {
         }
         
         indexer.freeRefMaps();
-        System.gc();
+        
+        //System.gc();
         System.out.println("\nJuntar todos os ficheiros resultantes da indexação..."); 
-        indexer.joinRefMaps();
+        
+        indexer.mergeFilesRefs();
         
         System.out.println("\nFim do processo de indexação e escrita em disco."); 
-        //indexer.generateFileTokenFreqDocs();
-        //indexer.generateFileTokenFreq(); 
-        
-        //System.out.println(docIdpath.toString());
      
     }   
     

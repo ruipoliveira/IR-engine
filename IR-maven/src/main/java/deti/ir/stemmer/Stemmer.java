@@ -23,6 +23,7 @@ public class Stemmer {
      * @throws java.lang.InstantiationException 
      * @throws java.lang.IllegalAccessException 
      */
+    
     public Stemmer(String algorithm) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
         this.algorithm = algorithm; 
         Class stemClass;

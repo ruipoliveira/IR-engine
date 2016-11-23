@@ -7,7 +7,6 @@ package deti.ir.memory;
  * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 public class MemoryManagement {
-    
   
     /**
      * JVM Runtime state.
