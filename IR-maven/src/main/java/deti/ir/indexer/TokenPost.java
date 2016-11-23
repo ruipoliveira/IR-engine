@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
  * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 
+/**
+ * construtor da estrutura final usada na indexacao
+ * @author gabriel
+ */
 public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
 
     private final int id;
@@ -36,7 +40,11 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
         this.subID = subID;
         this.x = new MemoryManagement(); 
     }
-
+    
+    /**
+     * especifica onde sao escritos os ficheiros temporarios
+     * @param subID 
+     */
     public void storeTokenMap(int subID) {
         String[] groups = getChar(id);
 
@@ -69,7 +77,11 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
         }
     }
 
-    
+    /**
+     * especifica onde sao escritos os ficheiros 
+     * @param files lista de ficheiros
+     * @param firstLetter primeira letra de um token
+     */
     public static void storeFinalMap(File[] files, String firstLetter) {
        
         File file = new File("outputs/tokenRef_" + firstLetter);
@@ -114,12 +126,19 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
 
     
 
- 
+    /**
+     * funcao que retorna o subID que e usado na escrita dos ficheiros temporarios
+     * @return 
+     */
     public int getSubID() {
         return subID;
     }
 
-
+    /**
+     * funcao que retorna o grupo a que pertence um termo de acordo com o id recebido na funcao findToken
+     * @param id especificacao do grupo
+     * @return 
+     */
     public String[] getChar(int id) {
         String[] group;
         switch (id) {

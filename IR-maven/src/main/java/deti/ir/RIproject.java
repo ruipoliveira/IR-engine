@@ -11,7 +11,15 @@ import java.io.IOException;
  */
 
 public class RIproject {
-   
+    /**
+     * funcao que inicia todo o processo
+     * @param args args[0] para especificar o directorio onde se encontra o corpus a ler
+     * args[1] para especificar em que directorio se enconra o ficheiro das stop words
+     * args[2] memoria maxima que a JVM pode atingir durante o processo
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws Exception 
+     */
     public static void main(String[]args) throws FileNotFoundException, IOException, Exception{
        
     File fdir = new File(args[0]);

@@ -36,7 +36,10 @@ public class Indexer {
     private HashMap<String, Integer> tokenFreqDocMap;
 
     private HashMap<String, String> tokenPosDocMap;
-
+    
+    /**
+     * construtor do indexer
+     */
     public Indexer() {
         sumxi = 0;
         // [a-d] [e-l] [m-r] [s-z] restante que nao são letras
@@ -53,7 +56,12 @@ public class Indexer {
         
     }
 
-
+    /**
+     * funcao que adiciona o token, docID e pos nas respectivas estruturas de dados
+     * @param token termo do documento
+     * @param docID numero de identificacao do documento a ser processado
+     * @param pos posicao ou posicoes do token no documento
+     */
     public void addTerm(String token, int docID, int pos) {
        
         tokenPosDocMap.merge(token, pos + "!", (a, b) -> a + b);
@@ -61,6 +69,11 @@ public class Indexer {
        
     }
 
+    /**
+     * funcao que obtem a frequencia com que um termo ocorre num documento e envia esse valor 
+     * pra a funcao computeValue calcular o seu peso
+     * @param docID numero de identificacao do documento a ser processado
+     */
     public void calculateTF(int docID) {
 
         Map<String, String> tmp;
@@ -80,31 +93,62 @@ public class Indexer {
         sumxi = 0;
         tokenPosDocMap = new HashMap<>();
     }
-
+    
+    /**
+     * funcao que calcula o peso do termo no documento
+     * @param value frequencia do termo no documento
+     * @return 
+     */
+    
     private double computeValue(double value) {
         double tf = 1 + Math.log10(value);
         sumxi += Math.pow(tf, 2);
        // System.out.println("val:"+value+" TF:"+tf+ " root:"+sumxi); 
         return tf;
     }
-
+    
+    /**
+     * funcao que armazena na estrutura o docID, o peso normalizado e a posicao no documento
+     * de um dado token. A funcao envia o peso do termo para a funcao tfNormalization normalizar o peso
+     * @param docId numero de identificacao do documento a ser processado
+     * @param value peso do termo no documento ja calculado
+     * @param pos posicao em que aparece o token no documento
+     * @return 
+     */
     private HashMap<Integer, String> getNewHM(int docId, String value, String pos) {
         HashMap<Integer, String> map = new HashMap<>();
         map.put(docId, tfNormalization(Double.valueOf(value)) + "-" + pos);
         return map;
     }
-
+    
+    /**
+     * funcao que faz o mesmo que a anterior mas actualiza a estrutura quando aparece o mesmo termo
+     * @param docId numero de identificacao do documento a ser processado
+     * @param value peso do termo no documento ja calculado
+     * @param hm estrutura que tem armazenado o docID, peso normalizado e posicao(oes) de cada token
+     * @param pos posicao em que aparece o token no documento
+     * @return 
+     */
     private HashMap<Integer, String> updateHM(int docId, String value, HashMap<Integer, String> hm, String pos) {
         //System.out.println("VALUE "+value); 
         hm.put(docId, tfNormalization(Double.valueOf(value)) + "-" + pos);
         return hm;
     }
-
+    
+    /**
+     * funcao que calcula a normalizacao do peso do termo no documento
+     * @param value peso do termo no documento
+     * @return 
+     */
     private double tfNormalization(double value) {
         return  value/Math.sqrt(sumxi);
     }
 
     
+    /**
+     * quando uma certa percentagem da memoria atribuida inicialmente na execucao do programa e atingida,
+     * consequentemente essa memoria e libertada. 
+     */
     public void freeRefMaps() {
         int i = 0;
         for (TokenPost tf : tokenRefs) {
@@ -117,7 +161,9 @@ public class Indexer {
 
     }
 
-    
+    /**
+     * funcao que junta num unico ficheiro o resultado dos diferentes ficheiros gerados pela funcao anterior
+     */
     public void mergeFilesRefs() {
 
         for (String letra : alph) {
@@ -138,7 +184,11 @@ public class Indexer {
         }
     }
     
-   
+    /**
+     * funcao que especifica em que mapa um termo deve ser guardado de acordo com a sua letra inicial
+     * @param term token do documento
+     * @return 
+     */
     private int findToken(String term) {
 
         if (pattern_ad.matcher(term).matches()) {

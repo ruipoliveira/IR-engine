@@ -36,7 +36,8 @@ public class CorpusReader {
     
 
     /**
-     * função para obter o texto de cada ficheiro
+     * funcao que faz o parse do body e title, retira o conteudo HTML e manda para a getText
+     * fazer o resto da filtragem feita no trabalho anterior
      * @param bodytitle
      * @return txt
      */
@@ -47,6 +48,11 @@ public class CorpusReader {
     }
     
     
+    /**
+     * fucao que faz a filtragem do conteudo recebido
+     * @param in
+     * @return 
+     */
     public String getText(String in){
         return in.toLowerCase()
                 .replaceAll("((https?|ftp|gopher|telnet|file|Unsure|http):((//)|(\\\\\\\\))+[\\\\w\\\\d:#@%/;$()~_?\\\\+-=\\\\\\\\\\\\.&]*)", " ") 
