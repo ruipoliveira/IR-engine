@@ -22,7 +22,7 @@ public class RIproject {
      */
     public static void main(String[]args) throws FileNotFoundException, IOException, Exception{
        
-    File fdir = new File(args[0]);
+    /*File fdir = new File(args[0]);
     File fstp = new File(args[1]);
     int memory = Integer.parseInt(args[2]); 
 
@@ -31,7 +31,11 @@ public class RIproject {
         dp.start();
     }else{
         System.out.println("Parametros incorretos."); 
-    }
-
+    }*/
+            // apenas para testar
+        SearchProcessor search = new SearchProcessor(System.getProperty("user.dir")+"/files-data/corpus-sample",
+        System.getProperty("user.dir")+"/files-data/stopwords_en.txt", 512); 
+        
+        search.start();
     }
 }
