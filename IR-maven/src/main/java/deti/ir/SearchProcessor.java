@@ -9,11 +9,14 @@ import deti.ir.memory.MemoryManagement;
 import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
 import deti.ir.tokenizer.Tokenizer;
+import deti.ir.query.Query; 
+import deti.ir.query.QueryProcessing;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
-import javax.management.Query;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -35,39 +38,93 @@ public class SearchProcessor {
     }
     
     public void start() throws IOException{
-        String querySearch;
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Type @exit in order to stop the search operation.");
-        //String query = queryContent(br);
+        
+        Query typeQ = null; 
+        String stringQ = ""; 
         while(true){
-                querySearch = queryContent(br);
-                if(querySearch.equals("@exit")) break;
-            //QueryCompute queryComp = new QueryCompute(docCollection.getSize(), query);
-                // Set timer
-                long start = System.currentTimeMillis(); 
-                // Make Pre Processing
-                // Process query tokens
-                for (String termo : token.tokenizeTermo(querySearch)){
-                    if (token.isValid(termo)){
-                        if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
-                            termo = stemmer.getStemmer(termo);
-                            System.out.println("Termo: "+termo); 
-                            //indexer.addTerm(termo, Integer.parseInt(i+""+idDoc),pos++);
-                        }   
-                    }
+            System.out.println("Insert @exit to stop the search operation.");
+            stringQ = queryString(br);
+            typeQ = queryType(br, stringQ);
+
+            QueryProcessing queryComp = new QueryProcessing(typeQ);
+          
+            long start = System.currentTimeMillis(); 
+
+            for (String termo : token.tokenizeTermo(stringQ)){
+                if (token.isValid(termo)){
+                    if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
+                        termo = stemmer.getStemmer(termo);
+                        System.out.println("Termo: "+termo); 
+                        queryComp.addTerm(termo);
+                    }   
                 }
+            }
+            
         }
-  
+        
+        
     }
     
     
-    private String queryContent(BufferedReader br){
-        String query = "";
+    private Query queryType(BufferedReader br, String stringQ){
+        String in_str = "";
+        int typeQ = 0; 
+        Query query = null;
         try {
-            System.out.println("Type query: ");
-            query = br.readLine().toLowerCase();
+            
+            System.out.print("0 -> Simple, 1 -> Phrase, 2 -> Proximity, 3 -> Field\nType query: ");
+            in_str = br.readLine(); 
+            if(in_str.equals("@exit")){
+                System.exit(0);
+            }
+            
+            try{
+                typeQ = Integer.parseInt(in_str);
+                if ((typeQ < 0) || (typeQ > 3)) {
+                    System.out.println("Invalid type");
+                    System.exit(0);
+                }
+            }catch(NumberFormatException e ){
+                System.out.println("Invalid input"); 
+            }
+            
+            switch(typeQ){
+            case 0:
+            case 1:
+                query = new Query(typeQ, stringQ); // Simple, Phrase
+                break;
+            case 2:
+                query = new Query(typeQ, stringQ); //Proximity
+                break;
+            case 3:
+                query = new Query(typeQ, stringQ); //Field
+                break;
+            }
+
         } catch (IOException ex) {
+            Logger.getLogger(SearchProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         return query;
-}
+    }
+    
+    private String queryString(BufferedReader br){
+        String query = ""; 
+        System.out.print("Insert your query: ");
+        try {
+            query = br.readLine().toLowerCase();
+            
+            if(query.equals("@exit")){
+                System.exit(0);
+            }
+                        
+        } catch (IOException ex) {
+            Logger.getLogger(SearchProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return query; 
+    }
+    
 }
