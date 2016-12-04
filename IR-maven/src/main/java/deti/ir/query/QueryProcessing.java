@@ -6,6 +6,9 @@
 package deti.ir.query;
 
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -32,12 +35,19 @@ public class QueryProcessing {
     }
     
     
+    public List<String> getQueryTerms(){
+        return termFreq.entrySet().stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+    
+    
     private double computeIDF(int size) {
-        return Double.valueOf(Math.log10(1.2 / size));
+        return (Math.log10(1.2 / size));
     }
     
     private double normalization(double value) {
-        return Double.valueOf(value / Math.sqrt(sumxi));
+        return (value / Math.sqrt(sumxi));
     }
         
 }

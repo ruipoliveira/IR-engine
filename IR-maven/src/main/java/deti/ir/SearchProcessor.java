@@ -45,7 +45,7 @@ public class SearchProcessor {
         String stringQ = ""; 
         while(true){
             System.out.println("Insert @exit to stop the search operation.");
-            stringQ = queryString(br);
+            stringQ = queryString(br); // content
             typeQ = queryType(br, stringQ);
 
             QueryProcessing queryComp = new QueryProcessing(typeQ);
@@ -96,7 +96,8 @@ public class SearchProcessor {
                 query = new Query(typeQ, stringQ); // Simple, Phrase
                 break;
             case 2:
-                query = new Query(typeQ, stringQ); //Proximity
+                int proxVal = getQueryProximity(br);
+                query = new Query(typeQ, stringQ, proxVal); //Proximity
                 break;
             case 3:
                 query = new Query(typeQ, stringQ); //Field
@@ -108,6 +109,21 @@ public class SearchProcessor {
         }
         
         return query;
+    }
+    
+    private int getQueryProximity(BufferedReader br){
+        int maxProxVal = 0;
+        System.out.print("Input a max proximity value -->  ");
+        try{
+            String value = br.readLine();
+            maxProxVal = Integer.parseInt(value);
+        }catch(NumberFormatException e){
+            System.out.println("Invalid proximity! Selected value 1 by default.");
+        }catch(IOException ex) {
+            Logger.getLogger(SearchProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return maxProxVal;
     }
     
     private String queryString(BufferedReader br){
