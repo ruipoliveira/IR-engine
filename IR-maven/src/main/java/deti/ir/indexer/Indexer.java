@@ -24,10 +24,10 @@ public class Indexer {
     
     private final TokenPost[] tokenRefs;
     
-    private final Pattern pattern_ad = Pattern.compile("^[a-d]\\w*");
-    private final Pattern pattern_el = Pattern.compile("[e-l]\\w*");
-    private final Pattern pattern_mr = Pattern.compile("^[m-r]\\w*");
-    private final Pattern pattern_sz = Pattern.compile("^[s-z]\\w*");
+    public static  final Pattern pattern_ad = Pattern.compile("^[a-d]\\w*");
+    public static final Pattern pattern_el = Pattern.compile("[e-l]\\w*");
+    public static final Pattern pattern_mr = Pattern.compile("^[m-r]\\w*");
+    public static final Pattern pattern_sz = Pattern.compile("^[s-z]\\w*");
 
     private List<String> alph = new LinkedList<>(); 
     
@@ -189,7 +189,7 @@ public class Indexer {
      * @param term token do documento
      * @return 
      */
-    private int findToken(String term) {
+    public static int findToken(String term) {
 
         if (pattern_ad.matcher(term).matches()) {
             return 0;

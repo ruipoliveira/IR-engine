@@ -9,6 +9,8 @@ import deti.ir.tokenizer.Tokenizer;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -33,6 +35,8 @@ public class DocumentProcessor {
     private final MemoryManagement memory;
     
     private final int maxMem; 
+    
+    
     /**
      * Construtor para o fluxo de processamento
      * @param directory
@@ -57,6 +61,7 @@ public class DocumentProcessor {
      */
     public void start() throws IOException{
         
+        int IDDDDCRLH = 0; 
         int pos; 
         for (int i = 1; i <= cr.getNrCollections(); i++) {
             CSVParser parser = new CSVParser(new FileReader(cr.getPath(i-1)), CSVFormat.DEFAULT.withHeader());
@@ -91,8 +96,10 @@ public class DocumentProcessor {
                     indexer.freeRefMaps();
                     System.gc();
                 }
-                
-            }  
+              IDDDDCRLH++;   
+            }
+            
+            System.out.println("NR FINAL DE DOCS: "+IDDDDCRLH); 
             
         parser.close();
             

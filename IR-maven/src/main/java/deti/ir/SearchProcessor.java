@@ -6,6 +6,7 @@
 package deti.ir;
 
 import deti.ir.memory.MemoryManagement;
+import deti.ir.query.IndexerResults;
 import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
 import deti.ir.tokenizer.Tokenizer;
@@ -15,6 +16,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,13 +31,15 @@ public class SearchProcessor {
     private final MemoryManagement memory;    
     private final int maxMem;
     private Tokenizer token;
+    private IndexerResults indexer; 
     
     public SearchProcessor(String indexDirectory, String stopWords_dir, int maxMem) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
         token = new Tokenizer(); 
         sw = new StopWords(Paths.get(stopWords_dir));
         stemmer = new Stemmer("englishStemmer");
         memory = new MemoryManagement(); 
-        this.maxMem = maxMem; 
+        this.maxMem = maxMem;
+        indexer = new IndexerResults(); 
     }
     
     public void start() throws IOException{
@@ -61,6 +66,23 @@ public class SearchProcessor {
                     }   
                 }
             }
+            
+            try{
+                System.out.println("Searching...");
+                
+                getTopResults(queryComp.computeScore(indexer.getPosting(queryComp.getQueryTerms(), typeQ)), 3278732);
+                
+                //System.out.println(indexer.getPosting(queryComp.getQueryTerms(), typeQ).toString());     
+
+                //getTopResults(, 30);
+                
+                
+                long elapsedTime = System.currentTimeMillis() - start;
+                System.out.println("Spent time: " + elapsedTime + "ms\n\n\n");
+            }catch(NullPointerException ex){
+                System.out.println("Not found");
+            }
+             
             
         }
         
@@ -142,5 +164,20 @@ public class SearchProcessor {
 
         return query; 
     }
+    
+    
+    public void getTopResults(HashMap<Integer, String> score, int limit) {
+
+        score.entrySet().stream()
+               // .sorted(Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(limit)
+                //.forEachOrdered(null);
+                .forEachOrdered((entry) -> {
+                    System.out.println("ID: " + entry.getKey() + "\t"
+                            + "\t\tScore: " + entry.getValue());
+                });
+    }
+
+    
     
 }
