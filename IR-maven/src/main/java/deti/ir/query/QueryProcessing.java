@@ -46,7 +46,7 @@ public class QueryProcessing {
     
     public HashMap<Integer, String> computeScore(HashMap<String, HashMap<Integer, String>> posting){
                 
-        System.out.println(posting.toString().length()); 
+        System.out.println(posting.toString()); 
         // Compute term Weight
         HashMap<String, Double> termWeight = new HashMap<>();
         termFreq.entrySet().parallelStream()

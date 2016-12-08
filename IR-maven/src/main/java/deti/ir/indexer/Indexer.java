@@ -37,6 +37,16 @@ public class Indexer {
 
     private HashMap<String, String> tokenPosDocMap;
     
+    final File folder = new File(""); 
+    
+    final File[] files = folder.listFiles( new FilenameFilter() {
+    @Override
+    public boolean accept( final File dir,
+                           final String name ) {
+        return name.matches("tokenRef_*");
+    }
+} );
+    
     /**
      * construtor do indexer
      */
@@ -164,6 +174,8 @@ public class Indexer {
     /**
      * funcao que junta num unico ficheiro o resultado dos diferentes ficheiros gerados pela funcao anterior
      */
+    
+    /*
     public void mergeFilesRefs() {
 
         for (String letra : alph) {
@@ -183,6 +195,40 @@ public class Indexer {
             
         }
     }
+    
+    */
+    
+    
+    public void joinRefMaps(int doc) {
+        freeRefMaps();
+
+        for (String letter : alph) {
+            int numberOfFiles = tokenRefs[findToken(letter)].getSubID();
+            TokenPost tr = new TokenPost(0, 0);
+            for (int i = 0; i < numberOfFiles; i++) {
+                TokenPost tri = new TokenPost(findToken(letter), i);
+                tri.loadTermRefMap(letter, i);
+                tr.mergeRefMap(tri);
+                tri = null;
+            }
+            System.out.println(letter+" DONE!"); 
+
+            tr.storeFinalMap(letter, doc);
+            
+        }
+        
+        for ( final File file : files ) {
+            if ( !file.delete() ) {
+                System.err.println( "Can't remove " + file.getAbsolutePath() );
+            }
+        }
+        
+        
+    }
+    
+    
+    
+    
     
     /**
      * funcao que especifica em que mapa um termo deve ser guardado de acordo com a sua letra inicial

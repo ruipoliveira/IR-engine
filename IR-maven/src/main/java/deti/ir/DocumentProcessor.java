@@ -103,14 +103,20 @@ public class DocumentProcessor {
             
         parser.close();
             
+            indexer.freeRefMaps();
+            //System.gc();
+            System.out.println("\nJuntar todos os ficheiros do corpus "+ i +" resultantes da indexação..."); 
+
+            //indexer.mergeFilesRefs();
+            indexer.joinRefMaps(i);
+        
         }
         
-        indexer.freeRefMaps();
         
-        //System.gc();
-        System.out.println("\nJuntar todos os ficheiros resultantes da indexação..."); 
         
-        indexer.mergeFilesRefs();
+        
+
+        
         
         System.out.println("\nFim do processo de indexação e escrita em disco."); 
      

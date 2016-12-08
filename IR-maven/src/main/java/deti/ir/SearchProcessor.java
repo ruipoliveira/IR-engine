@@ -69,6 +69,7 @@ public class SearchProcessor {
             
             try{
                 System.out.println("Searching...");
+                System.out.println(queryComp.getQueryTerms()); 
                 
                 getTopResults(queryComp.computeScore(indexer.getPosting(queryComp.getQueryTerms(), typeQ)), 3278732);
                 

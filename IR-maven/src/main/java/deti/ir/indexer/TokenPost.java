@@ -49,7 +49,7 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
         String[] groups = getChar(id);
 
         for (String group : groups) {
-            File file = new File("outputs/termRef_" + group.charAt(1) + "_" + id + subID);
+            File file = new File("tokenRef_" + group.charAt(1) + "_" + id + subID);
             try (BufferedWriter writer = Files.newBufferedWriter(file.toPath())) {
                 this.entrySet()
                         .stream()
@@ -124,6 +124,100 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
     }
 
 
+    
+    public void loadTermRefMapAux(String fileLetter) {
+        HashMap<Integer, String> hm;
+        Path file = Paths.get("tokenRef_" + fileLetter);
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                hm = new HashMap<>();
+                String[] refs = line.split(" - ");
+                String[] refs2 = refs[1].split(", ");
+                ArrayList<String> list = new ArrayList<>();
+                for(String s : refs2){
+                    String[] refs3 = s.split("=");
+                    for(String s2 : refs3){
+                        list.add(s2);
+                    }
+                }                
+                for (int j = 0; j < list.size() - 1; j += 2) {
+                    hm.put(Integer.parseInt(list.get(j).trim()), (list.get(j + 1).trim()));
+                }
+                this.put(refs[0].trim(), hm);
+            }
+            reader.close();
+        } catch (IOException ex) {}
+    }
+
+        public void mergeRefMap(TokenPost trm) {
+        //For each key in termRefMap 
+        for (String s : trm.keySet()) {
+            HashMap<Integer, String> temp = this.get(s);
+            //if that key exists in current termRefmap
+            if (temp != null) {
+                //Merge current value with new one
+                HashMap<Integer, String> toMerge = trm.get(s);
+                toMerge.forEach((k, v) -> temp.merge(k, v, (a, b) -> a + b));
+                //replace old hashmap with new one
+                this.put(s, temp);
+            } else {
+                //key does not exist in current map, add it
+                this.put(s, trm.get(s));
+            }
+        }
+
+    }
+        
+    public void storeFinalMap(String firstLetter, int doc) {
+        
+        File file = new File("outputs/tokenRef_" + firstLetter+doc);
+        
+        final String letter;
+
+        letter = firstLetter;
+        
+        try (BufferedWriter writer = Files.newBufferedWriter(file.toPath())) {
+            this.entrySet()
+                    .stream()
+                    .sorted(Entry.comparingByKey())
+                    .forEachOrdered(e -> {
+                        if (e.getKey().matches("^"+letter+".*")) {
+                            try {
+                                writer.write(e.getKey() + " - " + e.getValue().entrySet()
+                                        .stream()
+                                        .sorted(Entry.comparingByKey())
+                                        .map(Object::toString)
+                                        .collect(Collectors.joining(", ")) + "\n");
+                            } catch (IOException ex) {
+                                Logger.getLogger(TokenPost.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    });
+
+            writer.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TokenPost.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TokenPost.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    
+    
+    /**
+     * Loads an hashmap from a file.
+     * @param firstLetter
+     * @param i 
+     */
+    public void loadTermRefMap(String firstLetter, int i) {
+        
+        loadTermRefMapAux(firstLetter + "_" + id + i);
+    }
+
+    
+    
     
 
     /**
