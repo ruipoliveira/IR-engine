@@ -5,11 +5,16 @@
  */
 package deti.ir.query;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -84,14 +89,27 @@ public class QueryProcessing {
        
     
     
-    private double computeIDF(int size) {
-        return (Math.log10(3278732 / size));
+    private double computeIDF(int size){
+        return (Math.log10( getNrDocuments()/ size));
     }
     
     private double normalization(double value) {
         //System.out.println("SUM"+sumxi); 
         //System.out.println("value"+value); 
         return (value / Math.sqrt(sumxi));
+    }
+    
+    private int getNrDocuments(){
+        Scanner sc = null;
+        try {
+            sc = new Scanner(new File("nrDocID.txt"));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(QueryProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        int num;
+        num = sc.nextInt();        
+        //System.out.println(num);
+        return num;
     }
         
 }

@@ -27,7 +27,6 @@ public class RIproject {
         File fstp = new File(args[1]);
         int memory = Integer.parseInt(args[2]); 
         
-        
         if (fdir.exists() && fdir.isDirectory() && fstp.exists() && (memory >= 1 && memory <= 4096)) {
             DocumentProcessor dp = new DocumentProcessor(args[0], args[1], memory); 
             dp.start();
@@ -35,8 +34,7 @@ public class RIproject {
             System.out.println("Parametros incorretos."); 
         }
         
-        
-      
+              
         if (fdir.exists() && fdir.isDirectory() && fstp.exists() && (memory >= 1 && memory <= 4096)) {
             SearchProcessor search = new SearchProcessor(args[0], args[1], memory); 
             search.start();
