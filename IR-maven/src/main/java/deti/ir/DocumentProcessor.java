@@ -62,7 +62,9 @@ public class DocumentProcessor {
     public void start() throws IOException{
         
         int IDDDDCRLH = 0; 
-        int pos; 
+        int pos;
+        
+        indexer.deleteAuxFiles("outputs");
         for (int i = 1; i <= cr.getNrCollections(); i++) {
             CSVParser parser = new CSVParser(new FileReader(cr.getPath(i-1)), CSVFormat.DEFAULT.withHeader());
             System.out.println("Está a processar..."+cr.getPath(i-1)); 
@@ -101,15 +103,17 @@ public class DocumentProcessor {
             
             System.out.println("NR FINAL DE DOCS: "+IDDDDCRLH); 
             
-        parser.close();
+            parser.close();
             
             indexer.freeRefMaps();
             //System.gc();
             System.out.println("\nJuntar todos os ficheiros do corpus "+ i +" resultantes da indexação..."); 
-
+            
+            
             //indexer.mergeFilesRefs();
             indexer.joinRefMaps(i);
-        
+            indexer.deleteAuxFiles(System.getProperty("user.dir"));
+            
         }
         
         

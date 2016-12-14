@@ -49,7 +49,13 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
         String[] groups = getChar(id);
 
         for (String group : groups) {
-            File file = new File("tokenRef_" + group.charAt(1) + "_" + id + subID);
+            File file; 
+
+            if (id == 4)
+                file= new File("tokenRef_0_" + id + subID); 
+            else
+                file= new File("tokenRef_" + group.charAt(1) + "_" + id + subID);
+            
             try (BufferedWriter writer = Files.newBufferedWriter(file.toPath())) {
                 this.entrySet()
                         .stream()
@@ -124,8 +130,8 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
     }
 
 
-    
     public void loadTermRefMapAux(String fileLetter) {
+        //System.out.println("File: "+ fileLetter); 
         HashMap<Integer, String> hm;
         Path file = Paths.get("tokenRef_" + fileLetter);
         try (BufferedReader reader = Files.newBufferedReader(file)) {
@@ -175,7 +181,10 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
         
         final String letter;
 
-        letter = firstLetter;
+        if (firstLetter.equals("0"))
+            letter = "\\d+";
+        else    
+            letter = firstLetter;
         
         try (BufferedWriter writer = Files.newBufferedWriter(file.toPath())) {
             this.entrySet()
@@ -212,7 +221,7 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
      * @param i 
      */
     public void loadTermRefMap(String firstLetter, int i) {
-        
+        //System.out.println("firstLetter: "+ firstLetter); 
         loadTermRefMapAux(firstLetter + "_" + id + i);
     }
 
@@ -249,7 +258,7 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
                 return group = new String[]{"^s.*", "^t.*", "^u.*", "^v.*", "^w.*", "^x.*", "^y.*", "^z.*"};
             }
             default: {
-                return group = new String[]{"^0.*"};
+                return group = new String[]{"^\\d.*"};
             }
         }
     }

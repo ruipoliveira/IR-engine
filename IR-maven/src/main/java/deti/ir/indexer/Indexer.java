@@ -104,11 +104,27 @@ public class Indexer {
         tokenPosDocMap = new HashMap<>();
     }
     
+    
+    public void deleteAuxFiles(String path){
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+
+        String pattern = "tokenRef_.+";
+        FileFilter filter = new RegexFileFilter(pattern);
+        files = directory.listFiles(filter);
+
+        for(File f : files)
+            f.delete();
+        
+        System.out.println("Deleted aux files!"); 
+    }
+    
     /**
      * funcao que calcula o peso do termo no documento
      * @param value frequencia do termo no documento
      * @return 
      */
+    
     
     private double computeValue(double value) {
         double tf = 1 + Math.log10(value);
@@ -217,11 +233,6 @@ public class Indexer {
             
         }
         
-        for ( final File file : files ) {
-            if ( !file.delete() ) {
-                System.err.println( "Can't remove " + file.getAbsolutePath() );
-            }
-        }
         
         
     }
