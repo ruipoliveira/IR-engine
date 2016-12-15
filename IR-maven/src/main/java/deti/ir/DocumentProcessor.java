@@ -64,7 +64,7 @@ public class DocumentProcessor {
         int IDDDDCRLH = 0; 
         int pos;
         
-        indexer.deleteAuxFiles("outputs");
+        //indexer.deleteAuxFiles("outputs");
         for (int i = 1; i <= cr.getNrCollections(); i++) {
             CSVParser parser = new CSVParser(new FileReader(cr.getPath(i-1)), CSVFormat.DEFAULT.withHeader());
             System.out.println("Está a processar..."+cr.getPath(i-1)); 

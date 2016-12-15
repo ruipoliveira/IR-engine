@@ -51,12 +51,14 @@ public class QueryProcessing {
     
     public HashMap<Integer, String> computeScore(HashMap<String, HashMap<Integer, String>> posting){
                 
-        System.out.println(posting.toString()); 
+        System.out.println("Postings: "+posting.toString()); 
+     
         // Compute term Weight
         HashMap<String, Double> termWeight = new HashMap<>();
         termFreq.entrySet().parallelStream()
                 .forEach((entry) ->{
                     double weight = (1 + Math.log10(entry.getValue())) * computeIDF(posting.get(entry.getKey()).size());
+                    System.out.println("Peso: "+weight);
                     sumxi += Math.pow(weight, 2);
                     termWeight.put(entry.getKey(), weight);
                 });
@@ -64,10 +66,11 @@ public class QueryProcessing {
         
         // Normalize weight
         termWeight.replaceAll((k, v) -> normalization(v));
+        
         sumxi = 0.0;
         
         
-        System.out.println("--->"+termWeight.toString()); 
+        System.out.println("--->"+termWeight.values()); 
 
                 
         
@@ -90,13 +93,16 @@ public class QueryProcessing {
     
     
     private double computeIDF(int size){
-        return (Math.log10( getNrDocuments()/ size));
+        System.out.print("Size: "+size);
+        return (Math.log10( getNrDocuments() / size));
     }
     
     private double normalization(double value) {
-        //System.out.println("SUM"+sumxi); 
-        //System.out.println("value"+value); 
-        return (value / Math.sqrt(sumxi));
+        System.out.println("Valuuuue: "+value);
+        System.out.println("Math SQRT SUMXI: "+Math.sqrt(sumxi));
+        double cenas = (value / Math.sqrt(sumxi));
+        System.out.println("Cenas: "+cenas);
+        return cenas;
     }
     
     private int getNrDocuments(){
@@ -108,7 +114,6 @@ public class QueryProcessing {
         }
         int num;
         num = sc.nextInt();        
-        //System.out.println(num);
         return num;
     }
         

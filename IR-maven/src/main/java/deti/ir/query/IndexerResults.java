@@ -107,8 +107,7 @@ public class IndexerResults {
         HashMap<Integer, String> hm;
         String s = "";
         Path file = Paths.get("outputs/tokenRef_" + String.valueOf(f));
-        
-        
+
         try (Stream<String> lines = Files.lines(file)) {
             Optional<String> tmp = lines.filter(line -> line.startsWith(term)).findFirst();
             if(tmp.isPresent()){
@@ -120,10 +119,12 @@ public class IndexerResults {
     
 
     private char findFile(String term){
+        System.out.println("Term: "+term);
         char c = term.charAt(0);
         if(Character.isDigit(c)){
             return '0';
         }
+        
         else return c;
     }
 
