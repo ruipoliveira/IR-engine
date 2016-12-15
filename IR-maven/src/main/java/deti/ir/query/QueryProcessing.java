@@ -48,46 +48,61 @@ public class QueryProcessing {
                 .collect(Collectors.toList());
     }
     
+    
     public HashMap<Integer, String> computeScore(HashMap<String, HashMap<Integer, String>> posting){
                 
+        System.out.println("Postings: \n"+posting.toString()); 
         // Compute term Weight
         HashMap<String, Double> termWeight = new HashMap<>();
+        
         termFreq.entrySet().parallelStream()
                 .forEach((entry) ->{
                     double weight = (1 + Math.log10(entry.getValue())) * computeIDF(posting.get(entry.getKey()).size());
                     sumxi += Math.pow(weight, 2);
                     termWeight.put(entry.getKey(), weight);
+                    System.out.println("TERMWEIGHT: "+termWeight.toString());
+                    System.out.println("Peso: "+weight);
+                    
                 });
+        
         
         // Normalize weight
         termWeight.replaceAll((k, v) -> normalization(v));
-        sumxi = 0.0;
+        sumxi = 0.0;        
+        
+        /*double doc_length = Math.sqrt(sumxi);
+        termWeight.entrySet().stream().forEach((entry) ->{
+            termWeight.put(entry.getKey(), entry.getValue()/doc_length);
+        });*/
+        
+        System.out.println("--->"+termWeight.toString()); 
+
+        
         
         // Compute Score
         HashMap<Integer, String> score = new HashMap<>();
         posting.entrySet().stream()
                 .forEach((entry)->{
                     entry.getValue().entrySet().stream().forEach((e) ->{
-                        
-                       System.out.println(entry.getKey()); 
-                        
-                       score.merge(e.getKey(), 
+                     
+                        score.merge(e.getKey(), 
                                String.valueOf((termWeight.get(entry.getKey()) * Double.valueOf(e.getValue().split("-")[0]))),
                                (a, b) -> (String.valueOf(Double.valueOf(a) + Double.valueOf(b))));
                     });
                 });
         return score;
     }
-        
+       
+    
     
     private double computeIDF(int size){
-        return (Math.log10( getNrDocuments()/ size));
+        
+        return Math.log10( getNrDocuments() / size);
     }
     
     private double normalization(double value) {
-        //System.out.println("SUM"+sumxi); 
-        //System.out.println("value"+value); 
-        return (value / Math.sqrt(sumxi));
+
+        return value/Math.sqrt(sumxi);
     }
     
     private int getNrDocuments(){
@@ -99,7 +114,6 @@ public class QueryProcessing {
         }
         int num;
         num = sc.nextInt();        
-        //System.out.println(num);
         return num;
     }
         
