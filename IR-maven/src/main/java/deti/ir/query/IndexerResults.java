@@ -80,7 +80,6 @@ public class IndexerResults {
             char l = findFile(term);
             HashMap<Integer, String> tmp = new HashMap<>();
             String line = getTermLine (l, term);
-            System.out.println(line) ;
             if (!line.equals("")){
                 String s1 = line.split (" - ")[1];
                 String[] s2 = s1.split(", ");
@@ -93,6 +92,8 @@ public class IndexerResults {
                 posting.put(term, tmp);
             }
         });
+        
+        //System.out.println(posting.toString()); 
         return posting;
     }
 
@@ -106,8 +107,8 @@ public class IndexerResults {
     public String getTermLine(char f, String term) {
         HashMap<Integer, String> hm;
         String s = "";
-        Path file = Paths.get("outputs/tokenRef_" + String.valueOf(f));
-
+        Path file = Paths.get("outputs/tokenRef_" + String.valueOf(f)+"1");
+        
         try (Stream<String> lines = Files.lines(file)) {
             Optional<String> tmp = lines.filter(line -> line.startsWith(term)).findFirst();
             if(tmp.isPresent()){
@@ -119,12 +120,10 @@ public class IndexerResults {
     
 
     private char findFile(String term){
-        System.out.println("Term: "+term);
         char c = term.charAt(0);
         if(Character.isDigit(c)){
             return '0';
         }
-        
         else return c;
     }
 

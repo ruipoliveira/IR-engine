@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,15 +68,16 @@ public class SearchProcessor {
             
             try{
                 System.out.println("Searching...");
+                
                 System.out.println(queryComp.getQueryTerms()); 
+                System.out.println(indexer.getPosting(queryComp.getQueryTerms(), typeQ)); 
                 
                 getTopResults(queryComp.computeScore(indexer.getPosting(queryComp.getQueryTerms(), typeQ)), 3278732);
                 
                 //System.out.println(indexer.getPosting(queryComp.getQueryTerms(), typeQ).toString());     
 
                 //getTopResults(, 30);
-                
-                
+
                 long elapsedTime = System.currentTimeMillis() - start;
                 System.out.println("Spent time: " + elapsedTime + "ms\n\n\n");
             }catch(NullPointerException ex){

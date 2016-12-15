@@ -48,61 +48,46 @@ public class QueryProcessing {
                 .collect(Collectors.toList());
     }
     
-    
     public HashMap<Integer, String> computeScore(HashMap<String, HashMap<Integer, String>> posting){
                 
-        System.out.println("Postings: "+posting.toString()); 
-     
         // Compute term Weight
         HashMap<String, Double> termWeight = new HashMap<>();
         termFreq.entrySet().parallelStream()
                 .forEach((entry) ->{
                     double weight = (1 + Math.log10(entry.getValue())) * computeIDF(posting.get(entry.getKey()).size());
-                    System.out.println("Peso: "+weight);
                     sumxi += Math.pow(weight, 2);
                     termWeight.put(entry.getKey(), weight);
                 });
         
-        
         // Normalize weight
         termWeight.replaceAll((k, v) -> normalization(v));
-        
         sumxi = 0.0;
-        
-        
-        System.out.println("--->"+termWeight.values()); 
-
-                
         
         // Compute Score
         HashMap<Integer, String> score = new HashMap<>();
         posting.entrySet().stream()
                 .forEach((entry)->{
                     entry.getValue().entrySet().stream().forEach((e) ->{
-                       
-                        //System.out.println(Double.valueOf(e.getValue().split("-")[0])); 
                         
-                        score.merge(e.getKey(), 
+                       System.out.println(entry.getKey()); 
+                        
+                       score.merge(e.getKey(), 
                                String.valueOf((termWeight.get(entry.getKey()) * Double.valueOf(e.getValue().split("-")[0]))),
                                (a, b) -> (String.valueOf(Double.valueOf(a) + Double.valueOf(b))));
                     });
                 });
         return score;
     }
-       
-    
+        
     
     private double computeIDF(int size){
-        System.out.print("Size: "+size);
-        return (Math.log10( getNrDocuments() / size));
+        return (Math.log10( getNrDocuments()/ size));
     }
     
     private double normalization(double value) {
-        System.out.println("Valuuuue: "+value);
-        System.out.println("Math SQRT SUMXI: "+Math.sqrt(sumxi));
-        double cenas = (value / Math.sqrt(sumxi));
-        System.out.println("Cenas: "+cenas);
-        return cenas;
+        //System.out.println("SUM"+sumxi); 
+        //System.out.println("value"+value); 
+        return (value / Math.sqrt(sumxi));
     }
     
     private int getNrDocuments(){
@@ -114,6 +99,7 @@ public class QueryProcessing {
         }
         int num;
         num = sc.nextInt();        
+        //System.out.println(num);
         return num;
     }
         

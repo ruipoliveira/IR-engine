@@ -112,11 +112,15 @@ public class Indexer {
         String pattern = "tokenRef_.+";
         FileFilter filter = new RegexFileFilter(pattern);
         files = directory.listFiles(filter);
-
-        for(File f : files)
-            f.delete();
         
-        System.out.println("Deleted aux files!"); 
+        if (files.length >0){
+            for(File f : files)
+                f.delete();
+            System.out.println("Deleted aux files!"); 
+        }else{
+            System.out.println("Não existem ficheiros para eliminar!"); 
+        }
+
     }
     
     /**
