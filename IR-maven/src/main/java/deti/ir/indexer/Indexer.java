@@ -36,17 +36,8 @@ public class Indexer {
     private HashMap<String, Integer> tokenFreqDocMap;
 
     private HashMap<String, String> tokenPosDocMap;
-    
-    final File folder = new File(""); 
-    
-    final File[] files = folder.listFiles( new FilenameFilter() {
-    @Override
-    public boolean accept( final File dir,
-                           final String name ) {
-        return name.matches("tokenRef_*");
-    }
-} );
-    
+
+
     /**
      * construtor do indexer
      */
@@ -128,8 +119,6 @@ public class Indexer {
      * @param value frequencia do termo no documento
      * @return 
      */
-    
-    
     private double computeValue(double value) {
         double tf = 1 + Math.log10(value);
         sumxi += Math.pow(tf, 2);
@@ -194,31 +183,6 @@ public class Indexer {
     /**
      * funcao que junta num unico ficheiro o resultado dos diferentes ficheiros gerados pela funcao anterior
      */
-    
-    /*
-    public void mergeFilesRefs() {
-
-        for (String letra : alph) {
-            System.out.println("Juntar tokens com letra:"+letra); 
-            
-            File directory = new File("outputs");
-            File[] files = directory.listFiles();
-            
-            String pattern = "termRef_"+letra+"_[0-9]+";
-            FileFilter filter = new RegexFileFilter(pattern);
-            files = directory.listFiles(filter);
-            
-            TokenPost.storeFinalMap(files, letra);
-            
-            for(File f : files)
-                f.delete();
-            
-        }
-    }
-    
-    */
-    
-    
     public void joinRefMaps(int doc) {
         freeRefMaps();
 
@@ -231,19 +195,12 @@ public class Indexer {
                 tr.mergeRefMap(tri);
                 tri = null;
             }
-            System.out.println(letter+" DONE!"); 
+            System.out.println(letter+"# write!"); 
 
             tr.storeFinalMap(letter, doc);
-            
         }
-        
-        
-        
     }
-    
-    
-    
-    
+   
     
     /**
      * funcao que especifica em que mapa um termo deve ser guardado de acordo com a sua letra inicial
@@ -264,6 +221,5 @@ public class Indexer {
             return 4;
         }
     }
-        
 
 }

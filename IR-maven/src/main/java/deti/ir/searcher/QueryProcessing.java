@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package deti.ir.query;
+package deti.ir.searcher;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,8 +17,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- *
- * @author roliveira
+ * Universidade de Aveiro, DETI, Recuperação de Informação 
+ * @author Gabriel Vieira, gabriel.vieira@ua.pt
+ * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 public class QueryProcessing {
     
@@ -56,14 +56,17 @@ public class QueryProcessing {
         
         termFreq.entrySet().parallelStream()
                 .forEach((entry) ->{
-                    double weight = (1 + Math.log10(entry.getValue())) * computeIDF(posting.get(entry.getKey()).size());
+                    double weight = (1 + Math.log10(entry.getValue())) * 
+                            Math.log10( getNrDocuments() / posting.get(entry.getKey()).size()); // computeIDF
                     sumxi += Math.pow(weight, 2);
                     termWeight.put(entry.getKey(), weight);
                 });
         
-        
         // Normalize weight
-        termWeight.replaceAll((k, v) -> normalization(v));
+        termWeight.replaceAll((k, v) -> {
+            double norm = v/Math.sqrt(sumxi); 
+            return norm;
+        });
         sumxi = 0.0;        
                 
         // Compute Score
@@ -80,17 +83,6 @@ public class QueryProcessing {
         return score;
     }
        
-    
-    
-    private double computeIDF(int size){
-        
-        return Math.log10( getNrDocuments() / size);
-    }
-    
-    private double normalization(double value) {
-
-        return value/Math.sqrt(sumxi);
-    }
     
     private int getNrDocuments(){
         Scanner sc = null;

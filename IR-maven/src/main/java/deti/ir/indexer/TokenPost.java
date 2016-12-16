@@ -180,7 +180,6 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
         File file = new File("outputs/tokenRef_" + firstLetter+doc);
         
         final String letter;
-
         if (firstLetter.equals("0"))
             letter = "\\d+";
         else    
@@ -213,21 +212,17 @@ public class TokenPost extends HashMap<String, HashMap<Integer, String>> {
 
     }
 
-    
-    
     /**
      * Loads an hashmap from a file.
      * @param firstLetter
      * @param i 
      */
     public void loadTermRefMap(String firstLetter, int i) {
-        //System.out.println("firstLetter: "+ firstLetter); 
         loadTermRefMapAux(firstLetter + "_" + id + i);
     }
 
     
-    
-    
+  
 
     /**
      * funcao que retorna o subID que e usado na escrita dos ficheiros temporarios
