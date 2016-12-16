@@ -75,25 +75,38 @@ public class IndexerResults {
     private HashMap<String, HashMap<Integer, String>> getNormalQueryPosting(List<String> terms) {
 
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
+
         terms.forEach((term) -> {
             
             char l = findFile(term);
             HashMap<Integer, String> tmp = new HashMap<>();
-            String line = getTermLine (l, term);
-            if (!line.equals("")){
-                String s1 = line.split (" - ")[1];
+            String line1 = getTermLine (l, term, 1);
+            
+            if (!line1.equals("")){
+                String s1 = line1.split (" - ")[1];
                 String[] s2 = s1.split(", ");
                 for (String s: s2){
                     String[] s3 = s.split("=");
                     tmp.put(Integer.parseInt(s3[0].trim()), s3[1].split("!")[0].trim());
                 }
             }
+            
+            String line2 = getTermLine (l, term, 2);
+            if (!line2.equals("")){
+                String s1 = line2.split (" - ")[1];
+                String[] s2 = s1.split(", ");
+                for (String s: s2){
+                    String[] s3 = s.split("=");
+                    tmp.put(Integer.parseInt(s3[0].trim()), s3[1].split("!")[0].trim());
+                }
+            }
+                        
             if (tmp != null) {
                 posting.put(term, tmp);
             }
         });
         
-        //System.out.println(posting.toString()); 
+      
         return posting;
     }
 
@@ -104,10 +117,10 @@ public class IndexerResults {
      * @param term term to find.
      * @return indexed line.
      */
-    public String getTermLine(char f, String term) {
+    public String getTermLine(char f, String term, int docId) {
         HashMap<Integer, String> hm;
         String s = "";
-        Path file = Paths.get("outputs/tokenRef_" + String.valueOf(f)+"1");
+        Path file = Paths.get("outputs/tokenRef_" + String.valueOf(f)+docId);
         
         try (Stream<String> lines = Files.lines(file)) {
             Optional<String> tmp = lines.filter(line -> line.startsWith(term)).findFirst();

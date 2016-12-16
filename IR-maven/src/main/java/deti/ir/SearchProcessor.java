@@ -61,7 +61,7 @@ public class SearchProcessor {
                 if (token.isValid(termo)){
                     if(!sw.isStopWord(termo)){ // se for stop word ignora, senao adiciona
                         termo = stemmer.getStemmer(termo);
-                        System.out.println("Termo: "+termo); 
+                        //System.out.println("Termo: "+termo); 
                         queryComp.addTerm(termo);
                     }   
                 }

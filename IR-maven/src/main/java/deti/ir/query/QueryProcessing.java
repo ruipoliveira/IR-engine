@@ -51,7 +51,6 @@ public class QueryProcessing {
     
     public HashMap<Integer, String> computeScore(HashMap<String, HashMap<Integer, String>> posting){
                 
-        System.out.println("Postings: \n"+posting.toString()); 
         // Compute term Weight
         HashMap<String, Double> termWeight = new HashMap<>();
         
@@ -60,25 +59,13 @@ public class QueryProcessing {
                     double weight = (1 + Math.log10(entry.getValue())) * computeIDF(posting.get(entry.getKey()).size());
                     sumxi += Math.pow(weight, 2);
                     termWeight.put(entry.getKey(), weight);
-                    System.out.println("TERMWEIGHT: "+termWeight.toString());
-                    System.out.println("Peso: "+weight);
-                    
                 });
         
         
         // Normalize weight
         termWeight.replaceAll((k, v) -> normalization(v));
         sumxi = 0.0;        
-        
-        /*double doc_length = Math.sqrt(sumxi);
-        termWeight.entrySet().stream().forEach((entry) ->{
-            termWeight.put(entry.getKey(), entry.getValue()/doc_length);
-        });*/
-        
-        System.out.println("--->"+termWeight.toString()); 
-
-        
-        
+                
         // Compute Score
         HashMap<Integer, String> score = new HashMap<>();
         posting.entrySet().stream()
