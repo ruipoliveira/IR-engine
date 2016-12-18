@@ -37,7 +37,7 @@ public class RIproject {
         
             
         if (fdir.exists() && fdir.isDirectory() && fstp.exists() && (memory >= 1 && memory <= 4096)) {
-            SearchProcessor search = new SearchProcessor(args[0], args[1], memory); 
+            SearchProcessor search = new SearchProcessor(args[0], args[1]); 
             search.start();
             
         }else{

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package deti.ir.searcher;
 
 import java.io.IOException;
@@ -22,7 +17,7 @@ import java.util.stream.Stream;
  */
 public class IndexerResults {
 
-    private int counter;
+    private int cont;
 
     public IndexerResults() {
 
@@ -39,7 +34,7 @@ public class IndexerResults {
                 posting = getPhraseQueryPosting(terms);
                 break;
             /*case 2:
-                posting = getProximityQueryPosting(terms, q.getProximity());
+                posting = proximity(); // not implemeneted
                 break;*/
             default:
                 break;
@@ -69,9 +64,10 @@ public class IndexerResults {
     private Map<Integer, ArrayList<ScorePosition>> documentsOccurrence(List<String> terms) {
         Map<Integer, ArrayList<ScorePosition>> results = new HashMap<>();
 
-        counter = 0;
+        cont = 0;
         terms.forEach((String term) -> {
             char l = findFile(term);
+   
             String line = getTermLine (l, term,1);
             HashMap<Integer, ArrayList<Integer>> tmp = new HashMap<>();
             HashMap<Integer, Double> tmp2 = new HashMap<>();
@@ -89,8 +85,8 @@ public class IndexerResults {
                 }
                 
                 // First term found
-                if (counter == 0){
-                    counter++;
+                if (cont == 0){
+                    cont++;
                     tmp.entrySet().stream().forEach((e) ->{
                         ArrayList<ScorePosition> termsPositions = new ArrayList<>();
                         ScorePosition dp = new ScorePosition(tmp2.get(e.getKey()), e.getValue());
@@ -100,12 +96,12 @@ public class IndexerResults {
                 }
                 // Update for new term.
                 else{
-                    counter++;
+                    cont++;
                     tmp.entrySet().stream().forEach((e) -> {
                         ArrayList<ScorePosition> aux;
                         if ((aux = results.get(e.getKey())) != null) {
                             // Only add the document if the previous document was also in this document.
-                            if (aux.size() == counter - 1) {
+                            if (aux.size() == cont - 1) {
                                 ScorePosition dp = new ScorePosition(tmp2.get(e.getKey()), e.getValue());
                                 aux.add(dp);
                                 results.put(e.getKey(), aux);
@@ -115,13 +111,11 @@ public class IndexerResults {
                 }
             }
         });
+
         
-        /**
-         * Filter the results to guarantee if all the terms were found in all the documents.
-         */
         Map<Integer, ArrayList<ScorePosition>> occurrances;
         occurrances = results.entrySet().stream()
-                .filter(e -> e.getValue().size() == counter)
+                .filter(e -> e.getValue().size() == cont)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         return occurrances;
     }
@@ -170,18 +164,18 @@ public class IndexerResults {
     private HashMap<String, HashMap<Integer, String>> getPostingByDistance(List<String> terms, ArrayList<Integer> docIDs, Map<Integer, ArrayList<ScorePosition>> initPosting) {
 
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
-        counter = 0;
+        cont = 0;
         terms.forEach((term) ->{
             HashMap<Integer, String> tmp = new HashMap<>();
             initPosting.entrySet().forEach((entry)->{
                 if (docIDs.contains(entry.getKey())) {
-                    tmp.merge(entry.getKey(), String.valueOf(entry.getValue().get(counter).getScore()), (a, b) -> (String.valueOf(Double.valueOf(a) + Double.valueOf(b))));
+                    tmp.merge(entry.getKey(), String.valueOf(entry.getValue().get(cont).getScore()), (a, b) -> (String.valueOf(Double.valueOf(a) + Double.valueOf(b))));
                 }
             });
             if (tmp != null) {
                 posting.put(term, tmp);
             }
-            counter++;
+            cont++;
         });
         return posting;
     }

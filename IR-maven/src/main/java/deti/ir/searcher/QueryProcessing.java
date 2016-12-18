@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package deti.ir.searcher;
 
 import java.io.File;
@@ -23,44 +18,55 @@ import java.util.stream.Collectors;
  */
 public class QueryProcessing {
     
-    private Query query; 
+    private final Query query; 
     
     private final LinkedHashMap<String, Integer> termFreq;
     
     private double sumxi;
     
-    
+    /**
+     * 
+     * @param query 
+     */
     public QueryProcessing(Query query){
         this.query = query;
         this.sumxi = 0.0;
         termFreq = new LinkedHashMap<>();
     }
     
-    
+    /**
+     * 
+     * @param token 
+     */
     public void addTerm(String token){
         termFreq.merge(token, 1, (a, b) -> a + b);
     }
     
-    
+    /**
+     * 
+     * @return 
+     */
     public List<String> getQueryTerms(){
-        return termFreq.entrySet().stream()
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+        return termFreq.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList());
     }
     
-    
-    public HashMap<Integer, String> computeScore(HashMap<String, HashMap<Integer, String>> posting){
+    /**
+     * 
+     * @param posting
+     * @return 
+     */
+    public HashMap<Integer, String> calculateScore(HashMap<String, HashMap<Integer, String>> posting){
                 
         // Compute term Weight
         HashMap<String, Double> termWeight = new HashMap<>();
         
         termFreq.entrySet().parallelStream()
-                .forEach((entry) ->{
-                    double weight = (1 + Math.log10(entry.getValue())) * 
-                            Math.log10( getNrDocuments() / posting.get(entry.getKey()).size()); // computeIDF
-                    sumxi += Math.pow(weight, 2);
-                    termWeight.put(entry.getKey(), weight);
-                });
+            .forEach((entry) ->{
+                double weight = (1 + Math.log10(entry.getValue())) * 
+                    Math.log10( getNrDocuments() / posting.get(entry.getKey()).size()); // calcular IDF
+                sumxi += Math.pow(weight, 2);
+                termWeight.put(entry.getKey(), weight);
+            });
         
         // Normalize weight
         termWeight.replaceAll((k, v) -> {
@@ -74,16 +80,19 @@ public class QueryProcessing {
         posting.entrySet().stream()
                 .forEach((entry)->{
                     entry.getValue().entrySet().stream().forEach((e) ->{
-                     
+                        
                         score.merge(e.getKey(), 
-                               String.valueOf((termWeight.get(entry.getKey()) * Double.valueOf(e.getValue().split("-")[0]))),
-                               (a, b) -> (String.valueOf(Double.valueOf(a) + Double.valueOf(b))));
+                            String.valueOf((termWeight.get(entry.getKey()) * Double.valueOf(e.getValue().split("-")[0]))),
+                            (a, b) -> (String.valueOf(Double.valueOf(a) + Double.valueOf(b))));
                     });
                 });
         return score;
     }
        
-    
+    /**
+     * 
+     * @return 
+     */
     private int getNrDocuments(){
         Scanner sc = null;
         try {

@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package deti.ir;
 
-import deti.ir.memory.MemoryManagement;
 import deti.ir.searcher.IndexerResults;
 import deti.ir.stemmer.Stemmer;
 import deti.ir.stopWords.StopWords;
@@ -22,26 +16,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author gabriel
+ * Universidade de Aveiro, DETI, Recuperação de Informação 
+ * @author Gabriel Vieira, gabriel.vieira@ua.pt
+ * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 public class SearchProcessor {
     private Stemmer stemmer;
     private StopWords sw;
-    private final MemoryManagement memory;    
-    private final int maxMem;
     private Tokenizer token;
     private IndexerResults indexer; 
     
-    public SearchProcessor(String indexDirectory, String stopWords_dir, int maxMem) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
+    public SearchProcessor(String indexDirectory, String stopWords_dir) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
         token = new Tokenizer(); 
         sw = new StopWords(Paths.get(stopWords_dir));
         stemmer = new Stemmer("englishStemmer");
-        memory = new MemoryManagement(); 
-        this.maxMem = maxMem;
         indexer = new IndexerResults(); 
     }
     
+    /**
+     * 
+     * @throws IOException 
+     */
     public void start() throws IOException{
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -81,7 +76,7 @@ public class SearchProcessor {
                 System.out.println("Searching...");
                 System.out.println(queryComp.getQueryTerms()); 
                 
-                getResults(queryComp.computeScore(indexer.getPosting(queryComp.getQueryTerms(), typeQ)),limit );               
+                printScores(queryComp.calculateScore(indexer.getPosting(queryComp.getQueryTerms(), typeQ)),limit );               
                 long elapsedTime = System.currentTimeMillis() - start;
                 System.out.println("Spent time: " + elapsedTime + "ms\n\n\n");
             }catch(NullPointerException ex){
@@ -90,14 +85,20 @@ public class SearchProcessor {
         }
     }
     
-    
+    /**
+     * 
+     * @param br
+     * @param stringQ
+     * @return 
+     */
     private Query queryType(BufferedReader br, String stringQ){
         String in_str = "";
         int typeQ = 0; 
         Query query = null;
         try {
             
-            System.out.print("0 -> Simple, 1 -> Phrase, 2 -> Proximity\nType query: ");
+            System.out.println("0 -> Simple, 1 -> Phrase, 2 -> Proximity");
+            System.out.print("Type query: ");
             in_str = br.readLine(); 
             if(in_str.equals("@exit")){
                 System.exit(0);
@@ -146,6 +147,12 @@ public class SearchProcessor {
         return maxProxVal;
     }
     
+    
+    /**
+     * 
+     * @param br
+     * @return 
+     */
     private String queryString(BufferedReader br){
         String query = ""; 
         System.out.print("Insert your query: ");
@@ -163,15 +170,19 @@ public class SearchProcessor {
         return query; 
     }
     
-    
-    private void getResults(HashMap<Integer, String> score, int limit) {
+    /**
+     * 
+     * @param score
+     * @param limit 
+     */
+    private void printScores(HashMap<Integer, String> score, int limit) {
 
         score.entrySet().stream()
             .limit(limit)
             .sorted(Entry.comparingByValue(Comparator.reverseOrder()))    
             .forEachOrdered((entry) -> {
-                System.out.println("ID: " + entry.getKey() + "\t"
-                    + "\t\tScore: " + entry.getValue());
+                System.out.println("Doc ID: " + entry.getKey() + "\t"
+                    + "\tScore value: " + entry.getValue());
             });
     }
 }
