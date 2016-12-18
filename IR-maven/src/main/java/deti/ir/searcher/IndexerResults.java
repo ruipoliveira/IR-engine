@@ -45,30 +45,30 @@ public class IndexerResults {
     private HashMap<String, HashMap<Integer, String>> getPhraseQueryPosting(List<String> terms) {
 
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
-        Map<Integer, ArrayList<ScorePosition>> ocurrences = documentsOccurrence(terms);
+        Map<Integer, ArrayList<ScorePosition>> ocurrs = docsOccurrence(terms);
         
-        System.out.println(ocurrences.size());
-        if (!ocurrences.isEmpty()) {
-            ArrayList<Integer> docIDs = getDocIDsByDistance(ocurrences, 1, false);
+        System.out.println(ocurrs.size());
+        if (!ocurrs.isEmpty()) {
+            ArrayList<Integer> docIDs = getDocIDsByDistance(ocurrs, 1, false);
             System.out.println(docIDs.size());
             if (!docIDs.isEmpty()) {
-                posting = getPostingByDistance(terms, docIDs, ocurrences);
+                posting = getPostingByDistance(terms, docIDs, ocurrs);
             } else {
-                System.out.println("No documents found");
+                System.out.println("No documents found!");
             }
         }
         return posting;
     }
     
     
-    private Map<Integer, ArrayList<ScorePosition>> documentsOccurrence(List<String> terms) {
-        Map<Integer, ArrayList<ScorePosition>> results = new HashMap<>();
+    private Map<Integer, ArrayList<ScorePosition>> docsOccurrence(List<String> terms) {
+        Map<Integer, ArrayList<ScorePosition>> score_results = new HashMap<>();
 
         cont = 0;
         terms.forEach((String term) -> {
-            char l = findFile(term);
+            char c = findFile(term);
    
-            String line = getTermLine (l, term,1);
+            String line = getTermLine (c, term,1);
             HashMap<Integer, ArrayList<Integer>> tmp = new HashMap<>();
             HashMap<Integer, Double> tmp2 = new HashMap<>();
             
@@ -88,23 +88,23 @@ public class IndexerResults {
                 if (cont == 0){
                     cont++;
                     tmp.entrySet().stream().forEach((e) ->{
-                        ArrayList<ScorePosition> termsPositions = new ArrayList<>();
-                        ScorePosition dp = new ScorePosition(tmp2.get(e.getKey()), e.getValue());
-                        termsPositions.add(dp);
-                        results.put(e.getKey(), termsPositions);
+                        ArrayList<ScorePosition> termsPos = new ArrayList<>();
+                        ScorePosition sp = new ScorePosition(tmp2.get(e.getKey()), e.getValue());
+                        termsPos.add(sp);
+                        score_results.put(e.getKey(), termsPos);
                     });
                 }
                 // Update for new term.
                 else{
                     cont++;
                     tmp.entrySet().stream().forEach((e) -> {
-                        ArrayList<ScorePosition> aux;
-                        if ((aux = results.get(e.getKey())) != null) {
+                        ArrayList<ScorePosition> score_aux;
+                        if ((score_aux = score_results.get(e.getKey())) != null) {
                             // Only add the document if the previous document was also in this document.
-                            if (aux.size() == cont - 1) {
+                            if (score_aux.size() == cont - 1) {
                                 ScorePosition dp = new ScorePosition(tmp2.get(e.getKey()), e.getValue());
-                                aux.add(dp);
-                                results.put(e.getKey(), aux);
+                                score_aux.add(dp);
+                                score_results.put(e.getKey(), score_aux);
                             }
                         }
                     });
@@ -114,7 +114,7 @@ public class IndexerResults {
 
         
         Map<Integer, ArrayList<ScorePosition>> occurrances;
-        occurrances = results.entrySet().stream()
+        occurrances = score_results.entrySet().stream()
                 .filter(e -> e.getValue().size() == cont)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         return occurrances;
@@ -128,9 +128,9 @@ public class IndexerResults {
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
 
         terms.forEach((term) -> {
-            char l = findFile(term);
+            char c = findFile(term);
             HashMap<Integer, String> tmp = new HashMap<>();
-            String line1 = getTermLine (l, term, 1);
+            String line1 = getTermLine (c, term, 1);
             
             if (!line1.equals("")){
                 String s1 = line1.split (" - ")[1];
@@ -141,7 +141,7 @@ public class IndexerResults {
                 }
             }
             
-            String line2 = getTermLine (l, term, 2);
+            String line2 = getTermLine (c, term, 2);
             if (!line2.equals("")){
                 String s1 = line2.split (" - ")[1];
                 String[] s2 = s1.split(", ");
@@ -150,84 +150,80 @@ public class IndexerResults {
                     tmp.put(Integer.parseInt(s3[0].trim()), s3[1].split("!")[0].trim());
                 }
             }
-                        
-            if (tmp != null) {
-                posting.put(term, tmp);
-            }
+     
+            posting.put(term, tmp);       
         });
-        
-      
+ 
         return posting;
     }
 
     
     private HashMap<String, HashMap<Integer, String>> getPostingByDistance(List<String> terms, ArrayList<Integer> docIDs, Map<Integer, ArrayList<ScorePosition>> initPosting) {
 
-        HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
+        HashMap<String, HashMap<Integer, String>> posts = new HashMap<>();
         cont = 0;
         terms.forEach((term) ->{
-            HashMap<Integer, String> tmp = new HashMap<>();
+            HashMap<Integer, String> hash = new HashMap<>();
             initPosting.entrySet().forEach((entry)->{
                 if (docIDs.contains(entry.getKey())) {
-                    tmp.merge(entry.getKey(), String.valueOf(entry.getValue().get(cont).getScore()), (a, b) -> (String.valueOf(Double.valueOf(a) + Double.valueOf(b))));
+                    hash.merge(entry.getKey(), String.valueOf(entry.getValue().get(cont).getScore()), (a, b) -> (String.valueOf(Double.valueOf(a) + Double.valueOf(b))));
                 }
             });
-            if (tmp != null) {
-                posting.put(term, tmp);
-            }
+
+            posts.put(term, hash); 
             cont++;
         });
-        return posting;
+        
+        return posts;
     }
     
-    private ArrayList<Integer> getDocIDsByDistance(Map<Integer, ArrayList<ScorePosition>> ocurrences, int distance, boolean proximity) {
+    private ArrayList<Integer> getDocIDsByDistance(Map<Integer, ArrayList<ScorePosition>> score_occurs, int dist, boolean proximity) {
 
         ArrayList<Integer> docIDs = new ArrayList<>();
-        ocurrences.entrySet().stream().forEach(e -> {
+        score_occurs.entrySet().stream().forEach(e -> {
             ArrayList<ScorePosition> terms = e.getValue();
-            int counter = 0;
+            int count = 0;
             // Verify terms distance.
             for (int i = 0; i < terms.size() - 1; i++) {
                 ArrayList<Integer> term1 = terms.get(i).getPositions();
                 ArrayList<Integer> term2 = terms.get(i + 1).getPositions();
-                boolean found = false;
+                boolean founded = false;
                 for (Integer pos : term1) {
                     for (Integer pos2 : term2) {
-                        if ((Math.abs(pos2 - pos) <= distance) && (proximity || (pos2 - pos > 0))) {
-                            found = true;
+                        if ((Math.abs(pos2 - pos) <= dist) && (proximity || (pos2 - pos > 0))) {
+                            founded = true;
                             break;
                         }
-                        if(found){
+                        if(founded){
                             break;
                         }
                     }
                 }
-                if (found == true) {
-                    counter++;
+                if (founded == true) {
+                    count++;
                 }
             }
             // Verify the maximum distance between all terms of the query.
-            if (counter == terms.size() - 1) {
+            if (count == terms.size() - 1) {
                 docIDs.add(e.getKey());
             }
-            counter = 0;
+            count = 0;
         });
         return docIDs;
     }
     
     
     private String getTermLine(char f, String term, int docId) {
-        HashMap<Integer, String> hm;
-        String s = "";
+        String w = "";
         Path file = Paths.get("outputs/tokenRef_" + String.valueOf(f)+docId);
         
         try (Stream<String> lines = Files.lines(file)) {
             Optional<String> tmp = lines.filter(line -> line.startsWith(term)).findFirst();
             if(tmp.isPresent()){
-                s = tmp.get();
+                w = tmp.get();
             }
         } catch (IOException ex) {}
-        return s;
+        return w;
     }
     
     private char findFile(String term){

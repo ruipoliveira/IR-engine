@@ -65,7 +65,7 @@ public class QueryProcessing {
                 double weight = (1 + Math.log10(entry.getValue())) * 
                     Math.log10( getNrDocuments() / posting.get(entry.getKey()).size()); // calcular IDF
                 sumxi += Math.pow(weight, 2);
-                termWeight.put(entry.getKey(), weight);
+                termWeight.put(entry.getKey(), weight); // guardar todos os termos e seus pesos
             });
         
         // Normalize weight
@@ -76,17 +76,17 @@ public class QueryProcessing {
         sumxi = 0.0;        
                 
         // Compute Score
-        HashMap<Integer, String> score = new HashMap<>();
+        HashMap<Integer, String> final_score = new HashMap<>();
         posting.entrySet().stream()
                 .forEach((entry)->{
                     entry.getValue().entrySet().stream().forEach((e) ->{
                         
-                        score.merge(e.getKey(), 
+                        final_score.merge(e.getKey(), 
                             String.valueOf((termWeight.get(entry.getKey()) * Double.valueOf(e.getValue().split("-")[0]))),
                             (a, b) -> (String.valueOf(Double.valueOf(a) + Double.valueOf(b))));
                     });
                 });
-        return score;
+        return final_score;
     }
        
     /**

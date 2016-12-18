@@ -21,10 +21,10 @@ import java.util.logging.Logger;
  * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
 public class SearchProcessor {
-    private Stemmer stemmer;
-    private StopWords sw;
-    private Tokenizer token;
-    private IndexerResults indexer; 
+    private final Stemmer stemmer;
+    private final StopWords sw;
+    private final Tokenizer token;
+    private final IndexerResults indexer; 
     
     public SearchProcessor(String indexDirectory, String stopWords_dir) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
         token = new Tokenizer(); 
@@ -42,7 +42,8 @@ public class SearchProcessor {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
         Query typeQ = null; 
-        String stringQ = ""; 
+        String stringQ = "";
+        int limit = 0;
         while(true){
             System.out.println("Insert @exit to stop the search operation.");
             stringQ = queryString(br); // content
@@ -51,16 +52,22 @@ public class SearchProcessor {
             QueryProcessing queryComp = new QueryProcessing(typeQ);
           
             
-            System.out.print("Insert result limit, if \"all\" show everyone: "); 
-            String limit_str = br.readLine(); 
-            int limit;  
-            if (limit_str.equalsIgnoreCase("all")){
-                limit = 2147483647; 
-            }else{
-                limit = Integer.parseInt(limit_str); 
-            }
+            System.out.print("Insert result limit, if \"all\" shows everyone: "); 
             
-            long start = System.currentTimeMillis(); 
+            try{
+                String limit_str = br.readLine(); 
+                
+                if (limit_str.equalsIgnoreCase("all")){
+                    limit = 2147483647; 
+                }else{
+                    limit = Integer.parseInt(limit_str); 
+                }
+            }catch(NumberFormatException e){
+                System.out.println("Invalid input!");
+                System.exit(0);
+                
+            }
+            long start = System.currentTimeMillis(); // to count time of execution
 
             for (String termo : token.tokenizeTermo(stringQ)){
                 if (token.isValid(termo)){
@@ -75,8 +82,8 @@ public class SearchProcessor {
             try{
                 System.out.println("Searching...");
                 System.out.println(queryComp.getQueryTerms()); 
-                
-                printScores(queryComp.calculateScore(indexer.getPosting(queryComp.getQueryTerms(), typeQ)),limit );               
+           
+                printTopScores(queryComp.calculateScore(indexer.getPosting(queryComp.getQueryTerms(), typeQ)),limit );               
                 long elapsedTime = System.currentTimeMillis() - start;
                 System.out.println("Spent time: " + elapsedTime + "ms\n\n\n");
             }catch(NullPointerException ex){
@@ -112,6 +119,7 @@ public class SearchProcessor {
                 }
             }catch(NumberFormatException e ){
                 System.out.println("Invalid input"); 
+                System.exit(0);
             }
             
             switch(typeQ){
@@ -175,13 +183,13 @@ public class SearchProcessor {
      * @param score
      * @param limit 
      */
-    private void printScores(HashMap<Integer, String> score, int limit) {
+    private void printTopScores(HashMap<Integer, String> score, int limit) {
 
         score.entrySet().stream()
             .limit(limit)
             .sorted(Entry.comparingByValue(Comparator.reverseOrder()))    
             .forEachOrdered((entry) -> {
-                System.out.println("Doc ID: " + entry.getKey() + "\t"
+                System.out.println("Doc ID: " + entry.getKey() + "    "
                     + "\tScore value: " + entry.getValue());
             });
     }
