@@ -184,7 +184,7 @@ public class SearchProcessor {
      * @param limit 
      */
     private void printTopScores(HashMap<Integer, String> score, int limit) {
-
+         
         score.entrySet().stream()
             .limit(limit)
             .sorted(Entry.comparingByValue(Comparator.reverseOrder()))    
@@ -192,5 +192,8 @@ public class SearchProcessor {
                 System.out.println("Doc ID: " + entry.getKey() + "    "
                     + "\tScore value: " + entry.getValue());
             });
+        
+        System.out.println("The query was found in "+score.size()+" documents."); 
+        
     }
 }
