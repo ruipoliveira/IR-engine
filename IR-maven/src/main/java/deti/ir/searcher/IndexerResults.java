@@ -28,10 +28,10 @@ public class IndexerResults {
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
         switch (q.getType()) {
             case 0:
-                posting = getNormalQueryPosting(terms);
+                posting = getPostingNormal(terms);
                 break;
             case 1:
-                posting = getPhraseQueryPosting(terms);
+                posting = getPostingPhrase(terms);
                 break;
             /*case 2:
                 posting = proximity(); // not implemeneted
@@ -42,14 +42,14 @@ public class IndexerResults {
         return posting;
     }
 
-    private HashMap<String, HashMap<Integer, String>> getPhraseQueryPosting(List<String> terms) {
+    private HashMap<String, HashMap<Integer, String>> getPostingPhrase(List<String> terms) {
 
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
         Map<Integer, ArrayList<ScorePosition>> ocurrs = docsOccurrence(terms);
         
         System.out.println(ocurrs.size());
         if (!ocurrs.isEmpty()) {
-            ArrayList<Integer> docIDs = getDocIDsByDistance(ocurrs, 1, false);
+            ArrayList<Integer> docIDs = getDocIDsDistance(ocurrs, 1, false);
             System.out.println(docIDs.size());
             if (!docIDs.isEmpty()) {
                 posting = getPostingByDistance(terms, docIDs, ocurrs);
@@ -68,7 +68,7 @@ public class IndexerResults {
         terms.forEach((String term) -> {
             char c = findFile(term);
    
-            String line = getTermLine (c, term,1);
+            String line = getLine (c, term,1);
             HashMap<Integer, ArrayList<Integer>> tmp = new HashMap<>();
             HashMap<Integer, Double> tmp2 = new HashMap<>();
             
@@ -84,7 +84,6 @@ public class IndexerResults {
                     tmp2.put(Integer.parseInt(s3[0]), Double.valueOf(s3[1].split("-")[0]));
                 }
                 
-                // First term found
                 if (cont == 0){
                     cont++;
                     tmp.entrySet().stream().forEach((e) ->{
@@ -94,7 +93,6 @@ public class IndexerResults {
                         score_results.put(e.getKey(), termsPos);
                     });
                 }
-                // Update for new term.
                 else{
                     cont++;
                     tmp.entrySet().stream().forEach((e) -> {
@@ -123,14 +121,14 @@ public class IndexerResults {
     
     
     
-    private HashMap<String, HashMap<Integer, String>> getNormalQueryPosting(List<String> terms) {
+    private HashMap<String, HashMap<Integer, String>> getPostingNormal(List<String> terms) {
 
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
 
         terms.forEach((term) -> {
             char c = findFile(term);
             HashMap<Integer, String> tmp = new HashMap<>();
-            String line1 = getTermLine (c, term, 1);
+            String line1 = getLine (c, term, 1);
             
             if (!line1.equals("")){
                 String s1 = line1.split (" - ")[1];
@@ -141,7 +139,7 @@ public class IndexerResults {
                 }
             }
             
-            String line2 = getTermLine (c, term, 2);
+            String line2 = getLine (c, term, 2);
             if (!line2.equals("")){
                 String s1 = line2.split (" - ")[1];
                 String[] s2 = s1.split(", ");
@@ -177,7 +175,7 @@ public class IndexerResults {
         return posts;
     }
     
-    private ArrayList<Integer> getDocIDsByDistance(Map<Integer, ArrayList<ScorePosition>> score_occurs, int dist, boolean proximity) {
+    private ArrayList<Integer> getDocIDsDistance(Map<Integer, ArrayList<ScorePosition>> score_occurs, int dist, boolean proximity) {
 
         ArrayList<Integer> docIDs = new ArrayList<>();
         score_occurs.entrySet().stream().forEach(e -> {
@@ -203,7 +201,7 @@ public class IndexerResults {
                     count++;
                 }
             }
-            // Verify the maximum distance between all terms of the query.
+
             if (count == terms.size() - 1) {
                 docIDs.add(e.getKey());
             }
@@ -213,7 +211,7 @@ public class IndexerResults {
     }
     
     
-    private String getTermLine(char f, String term, int docId) {
+    private String getLine(char f, String term, int docId) {
         String w = "";
         Path file = Paths.get("outputs/tokenRef_" + String.valueOf(f)+docId);
         
