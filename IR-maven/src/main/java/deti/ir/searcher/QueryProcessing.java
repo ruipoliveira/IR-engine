@@ -35,15 +35,15 @@ public class QueryProcessing {
     }
     
     /**
-     * 
-     * @param token 
+     * Método que adiciona o termo e sua frequencia na query associada num hashMap
+     * @param token  termo da query a adicionar
      */
     public void addTerm(String token){
         termFreq.merge(token, 1, (a, b) -> a + b);
     }
     
     /**
-     * 
+     * Método que obtém a lista de termos armazenados na estrutura de dados HashMap
      * @return 
      */
     public List<String> getQueryTerms(){
@@ -51,7 +51,7 @@ public class QueryProcessing {
     }
     
     /**
-     * 
+     * Método que calcula o Score
      * @param posting
      * @return 
      */
@@ -90,7 +90,7 @@ public class QueryProcessing {
     }
        
     /**
-     * 
+     * Método que obtém o numero total de documentos indexados
      * @return 
      */
     private int getNrDocuments(){

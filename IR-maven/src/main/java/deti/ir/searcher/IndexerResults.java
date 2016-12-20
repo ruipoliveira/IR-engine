@@ -23,6 +23,12 @@ public class IndexerResults {
 
     }
 
+    /**
+     * Método que obtém o posting dos documentos validos onde os termos foram encontrados
+     * @param terms lista de termos
+     * @param q
+     * @return 
+     */
     public HashMap<String, HashMap<Integer, String>> getPosting(List<String> terms, Query q) {
 
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
@@ -41,7 +47,11 @@ public class IndexerResults {
         }
         return posting;
     }
-
+    /**
+     * Método de query phrase
+     * @param terms lista de termos
+     * @return 
+     */
     private HashMap<String, HashMap<Integer, String>> getPostingPhrase(List<String> terms) {
 
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
@@ -60,7 +70,11 @@ public class IndexerResults {
         return posting;
     }
     
-    
+    /**
+     * Metodo que obtem os documentos onde os termos da pesquisa foram econtrados
+     * @param terms lista de termos
+     * @return 
+     */
     private Map<Integer, ArrayList<ScorePosition>> docsOccurrence(List<String> terms) {
         Map<Integer, ArrayList<ScorePosition>> score_results = new HashMap<>();
 
@@ -120,7 +134,11 @@ public class IndexerResults {
     
     
     
-    
+    /**
+     * Método do tipo de query simples
+     * @param terms lista de termos
+     * @return 
+     */
     private HashMap<String, HashMap<Integer, String>> getPostingNormal(List<String> terms) {
 
         HashMap<String, HashMap<Integer, String>> posting = new HashMap<>();
@@ -155,7 +173,13 @@ public class IndexerResults {
         return posting;
     }
 
-    
+    /**
+     * Método que obtem os documentos validos por filtragem da maxima distancia
+     * @param terms lista de termos
+     * @param docIDs ID dos documentos
+     * @param initPosting
+     * @return 
+     */
     private HashMap<String, HashMap<Integer, String>> getPostingByDistance(List<String> terms, ArrayList<Integer> docIDs, Map<Integer, ArrayList<ScorePosition>> initPosting) {
 
         HashMap<String, HashMap<Integer, String>> posts = new HashMap<>();
@@ -175,6 +199,13 @@ public class IndexerResults {
         return posts;
     }
     
+    /**
+     * Método que obtem o posting de documentos verificando se a sua distancia e valida
+     * @param score_occurs ocorrencias do termo
+     * @param dist distancia maxima de procura
+     * @param proximity (nao usado)
+     * @return 
+     */
     private ArrayList<Integer> getDocIDsDistance(Map<Integer, ArrayList<ScorePosition>> score_occurs, int dist, boolean proximity) {
 
         ArrayList<Integer> docIDs = new ArrayList<>();
@@ -210,7 +241,13 @@ public class IndexerResults {
         return docIDs;
     }
     
-    
+    /**
+     * Obtem a linha do termo indexado 
+     * @param f identficador do ficheiro
+     * @param term termo a procurar 
+     * @param docId ID do documento onde procurar
+     * @return 
+     */ 
     private String getLine(char f, String term, int docId) {
         String w = "";
         Path file = Paths.get("outputs/tokenRef_" + String.valueOf(f)+docId);
@@ -224,6 +261,11 @@ public class IndexerResults {
         return w;
     }
     
+    /**
+     * Método que faz a procura pelo ficheiro de acordo com a primeira letra do termo
+     * @param term termo a procurar
+     * @return 
+     */
     private char findFile(String term){
         char c = term.charAt(0);
         if(Character.isDigit(c)){

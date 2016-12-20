@@ -34,7 +34,7 @@ public class SearchProcessor {
     }
     
     /**
-     * 
+     * Método que inicia processo de pesquisa
      * @throws IOException 
      */
     public void start() throws IOException{
@@ -93,9 +93,9 @@ public class SearchProcessor {
     }
     
     /**
-     * 
+     * Método para o utilizador decidir qual o tipo de query
      * @param br
-     * @param stringQ
+     * @param stringQ query de pesquisa introduzida pelo utilizador
      * @return 
      */
     private Query queryType(BufferedReader br, String stringQ){
@@ -140,6 +140,11 @@ public class SearchProcessor {
         return query;
     }
     
+    /**
+     * Método para obter o valor de proximidade introduzido pelo utilizador (nao usado)
+     * @param br
+     * @return 
+     */
     private int getQueryProximity(BufferedReader br){
         int maxProxVal = 0;
         System.out.print("Input a max proximity value -->  ");
@@ -157,7 +162,7 @@ public class SearchProcessor {
     
     
     /**
-     * 
+     * Método que permite ao utilizador introduzir a query de pesquisa
      * @param br
      * @return 
      */
@@ -179,9 +184,9 @@ public class SearchProcessor {
     }
     
     /**
-     * 
-     * @param score
-     * @param limit 
+     * Método que mostra os resultados ordenados 
+     * @param score score da query de pesquisa introduzida
+     * @param limit limite de resultados a retornar introduzido pelo utilizador
      */
     private void printTopScores(HashMap<Integer, String> score, int limit) {
          

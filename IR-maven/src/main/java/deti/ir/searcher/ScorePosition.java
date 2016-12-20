@@ -18,11 +18,20 @@ public class ScorePosition {
         this.score = score;
         this.positions = positions;
     }
-
+    
+    
+    /**
+     * Método que retorna o score
+     * @return 
+     */
     public double getScore() {
         return score;
     }
-
+    
+    /**
+     * Método que retorna as posições dos termos
+     * @return 
+     */
     public ArrayList<Integer> getPositions() {
         return positions;
     }
