@@ -135,7 +135,7 @@ public class IndexerResults {
     
     
     /**
-     * Método do tipo de query simples
+     * Método do tipo de query simples 
      * @param terms lista de termos
      * @return 
      */

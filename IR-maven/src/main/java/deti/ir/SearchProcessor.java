@@ -93,7 +93,7 @@ public class SearchProcessor {
     }
     
     /**
-     * Método para o utilizador decidir qual o tipo de query
+     * Método para o utilizador decidir qual o tipo de query 
      * @param br
      * @param stringQ query de pesquisa introduzida pelo utilizador
      * @return 

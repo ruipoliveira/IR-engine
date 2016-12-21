@@ -29,7 +29,7 @@ public class Query {
      * @param proximity 
      */
     public Query(int type, String contQuery, int proximity){
-        this.contQuery = contQuery; 
+        this.contQuery = contQuery;  
         this.type = type;
         this.proximity = proximity;
     }

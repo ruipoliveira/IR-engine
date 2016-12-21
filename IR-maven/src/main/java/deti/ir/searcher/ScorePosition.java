@@ -29,7 +29,7 @@ public class ScorePosition {
     }
     
     /**
-     * Método que retorna as posições dos termos
+     * Método que retorna as posições dos termos 
      * @return 
      */
     public ArrayList<Integer> getPositions() {

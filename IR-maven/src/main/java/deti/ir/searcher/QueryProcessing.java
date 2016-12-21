@@ -90,7 +90,7 @@ public class QueryProcessing {
     }
        
     /**
-     * Método que obtém o numero total de documentos indexados
+     * Método que obtém o numero total de documentos indexados 
      * @return 
      */
     private int getNrDocuments(){
