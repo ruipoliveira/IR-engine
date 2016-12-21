@@ -22,7 +22,7 @@ public class QueryProcessing {
     
     private final LinkedHashMap<String, Integer> termFreq;
     
-    private double sumxi;
+    private double sumxi; 
     
     /**
      * 

@@ -7,7 +7,7 @@ import java.util.*;
  * @author Gabriel Vieira, gabriel.vieira@ua.pt
  * @author Rui Oliveira, ruipedrooliveira@ua.pt
  */
-public class ScorePosition {
+public class ScorePosition { 
 
     private final double score;
     

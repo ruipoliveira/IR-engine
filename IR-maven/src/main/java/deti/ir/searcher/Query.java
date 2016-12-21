@@ -36,7 +36,7 @@ public class Query {
     
     
     public String getContQuery() {
-        return contQuery;
+        return contQuery; 
     }
 
     public int getType() {

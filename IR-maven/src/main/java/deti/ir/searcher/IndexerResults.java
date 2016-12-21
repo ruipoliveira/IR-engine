@@ -264,7 +264,7 @@ public class IndexerResults {
     /**
      * Método que faz a procura pelo ficheiro de acordo com a primeira letra do termo
      * @param term termo a procurar
-     * @return 
+     * @return  
      */
     private char findFile(String term){
         char c = term.charAt(0);

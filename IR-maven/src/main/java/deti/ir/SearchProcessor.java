@@ -1,4 +1,4 @@
-package deti.ir;
+package deti.ir; 
 
 import deti.ir.searcher.IndexerResults;
 import deti.ir.stemmer.Stemmer;
