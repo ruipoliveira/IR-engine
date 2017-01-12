@@ -1,8 +1,7 @@
 # Information Retrieval Engine
 
-## About
 
-### Requirements
+## Requirements
 
 * Maven 
 * [The Porter stemming algorithm] (http://snowball.tartarus.org/)
@@ -11,12 +10,13 @@
 * [Jsoup HTML parser library] (https://jsoup.org/)
 
 
-### Execution 
+## Execution 
 
 ``
 java -jar IR-maven.jar <path corpus folder > <path stoptword file> <Max memory>
 ``
 
+--
 
 ## Task 1
 Modelling:	classes	and	main	methods definition.
