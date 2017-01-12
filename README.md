@@ -1,5 +1,22 @@
 # Information Retrieval Engine
 
+## About
+
+### Requirements
+
+* Maven 
+* [The Porter stemming algorithm] (http://snowball.tartarus.org/)
+* [Apache Commons CSV] (https://commons.apache.org/proper/commonscsv/)
+* [Apache Commons IO] (http://commons.apache.org/proper/commonsio/)
+* [Jsoup HTML parser library] (https://jsoup.org/)
+
+
+### Execution 
+
+``
+java -jar IR-maven.jar <path corpus folder > <path stoptword file> <Max memory>
+``
+
 
 ## Task 1
 Modelling:	classes	and	main	methods definition.
@@ -36,3 +53,7 @@ a) Load the index from disk.
 * [report portuguese version (pdf)](https://github.com/ruipoliveira/IR-engine/blob/master/docs/IR_engine_report4.pdf) 
 * [delivery zip](https://github.com/ruipoliveira/IR-engine/blob/master/docs/IR-engine-report-task4-68779-68021.zip) 
 
+## Authors
+
+* Gabriel Vieira (gabriel.vieira@ua.pt)
+* Rui Oliveira (ruipedrooliveira@ua.pt)
